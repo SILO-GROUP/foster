@@ -1,0 +1,122 @@
+{
+	"units": [
+		{
+			"name":			"prepare environment",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/prepare_environment.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"stage and build cross binutils pass1",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/binutils.bash --stage --build_pass1",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"install cross binutils pass1",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/binutils.bash --install_pass1",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"stage and build cross gcc pass1",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/gcc.bash --stage --build_pass1",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"install cross gcc pass1",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/gcc.bash --install_pass1",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"stage and build linux api headers",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/linux-api-headers.bash --stage --build_headers",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"install linux api headers",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/linux-api-headers.bash --install_headers",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"stage and build glibc",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/glibc.bash --stage --build",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"install glibc",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/glibc.bash --install",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		}
+	]
+}
+
