@@ -1,0 +1,25 @@
+{
+	"plan":
+	[
+		{
+			"name":"install ct-ng", 
+			"dependencies":[ null ],
+			"comment": "stages, builds, installs ct-ng"
+		},
+		{
+			"name":"add non-root user", 
+			"dependencies":[ null ],
+			"comment": "ct-ng can't be run as root"
+		},
+		{
+			"name": "stage ct-ng conf", 
+			"dependencies":[ null ],
+			"comment": "stage the config to be used for generating the cross toolchain"
+		},
+		{
+			"name":"generate cross toolchain", 
+			"dependencies":[ null ],
+			"comment": "uses ct-ng to generate crosstools"
+		}
+	]
+}
