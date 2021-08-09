@@ -9,7 +9,7 @@ workspace := $(abspath $(current_dir)/../../foster)
 
 # user may want to use /opt/foster/init.sh
 build:
-	@${workspace}/init.sh
+	@sudo ${workspace}/init.sh
 
 # clean up artifacts between builds if desired
 # includes logs
@@ -22,7 +22,7 @@ clean_sources:
 
 # download the new source directory contents from LFS proper
 download_sources:
-	@${workspace}/makefile.controls/download_sources.sh
+	${workspace}/makefile.controls/download_sources.sh
 
 # download the patches from LFS
 # there is no clean here because i bundle fixed patches

@@ -38,17 +38,17 @@ TERM=xterm-256color
 LC_ALL=POSIX
 #LC_ALL=C
 
-# the directory that is the shared volume with the host
+# where this project is cloned to
 WORKSPACE=/opt/foster
 
 HIGH_LOGS="${WORKSPACE}/logs/scripts/"
 
 # A mutable directory in the shared volume so that inspection can occur
 # between builds.
-OUTDIR=/opt/foster/output
+OUTDIR=/home/bagira/ALFS_OUTPUT
 
 ## the SYSROOT directory that will eventually be the chroot
-TARGET_SYSROOT=${OUTDIR}/TARGET_SYSROOT
+TARGET_SYSROOT=${OUTDIR}/SYSROOT
 
 ARCHLIB_DIR=${TARGET_SYSROOT}/lib64
 
@@ -66,7 +66,7 @@ EXT_STAGING_DIR=${WORKSPACE}/staging
 SOURCES_DIR=${EXT_STAGING_DIR}/source
 
 # where the sources are built
-BUILD_DIR=${OUTDIR}/build
+BUILD_DIR=${OUTDIR}/temporary_build_directory
 
 # patches
 # storage directory for patches

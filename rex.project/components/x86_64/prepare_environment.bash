@@ -80,11 +80,10 @@ chown -vR "${BUILD_USER}":"${BUILD_GROUP}" "${ARCHLIB_DIR}"
 assert_zero $?
 
 # change ownership on the sources dir
-chown -vR "${BUILD_USER}":"${BUILD_GROUP}" "${SOURCES_DIR}"
-assert_zero $?
+chmod 777 "${SOURCES_DIR}"
+#assert_zero $?
 
 mkdir -p "${HIGH_LOGS}"
-chown -vR "${BUILD_USER}":"${BUILD_GROUP}" "${HIGH_LOGS}"
 chmod -vR 777 "${HIGH_LOGS}"
 
 chown -vR "${BUILD_USER}":"${BUILD_GROUP}" "${CX_DIR}"
