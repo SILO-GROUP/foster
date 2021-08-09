@@ -1,0 +1,6 @@
+6a5ac7e89b791aae556de0f745916f7f  bzip2-1.0.8-install_docs-1.patch
+cd8ebed2a67fff2e231026df91af6776  coreutils-8.32-i18n-1.patch
+9a5997c3452909b1769918c759eff8a2  glibc-2.33-fhs-1.patch
+f75cca16a38da6caa7d52151f7136895  kbd-2.4.0-backspace-1.patch
+4900322141d493e74020c9cf437b2cdc  sysvinit-2.98-consolidated-1.patch
+
