@@ -9,7 +9,22 @@
 		{
 			"name":"stage, compile, install binutils", 
 			"dependencies": [ null ],
-			"comment": "5.2.1 of https://www.linuxfromscratch.org/lfs/downloads/stable-systemd/LFS-BOOK-10.1-systemd-NOCHUNKS.html"
+			"comment": "5.2"
+		},
+		{
+			"name":"stage, compile, install gcc", 
+			"dependencies": [ null ],
+			"comment": "5.3"
+		},
+		{
+			"name":"stage, build, install linux api headers", 
+			"dependencies": [ null ],
+			"comment": "5.4"
+		},
+		{
+			"name":"stage, build, install glibc", 
+			"dependencies": [ null ],
+			"comment": "5.4"
 		}
 	]
 }

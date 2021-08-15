@@ -35,7 +35,8 @@ TEMP_STAGE_DIR=${T_SYSROOT}/source_stage
 ARCHLIB_DIR=${T_SYSROOT}/lib64
 
 T_VENDOR="rhl"
-T_TRIPLET=$(uname -m)-${T_VENDOR}-linux-gnu
+T_ARCH=$(uname -m)
+T_TRIPLET=${T_ARCH}-${T_VENDOR}-linux-gnu
 
 BUILD_USER="phanes"
 BUILD_GROUP="royalty"

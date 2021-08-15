@@ -140,9 +140,9 @@ mode_build_pass1() {
 	
 	logprint "Configuring binutils..."
 	../configure \
-		--prefix=$CROSSTOOLS_DIR \
-		--with-sysroot=$T_SYSROOT \
-		--target=$T_TRIPLET \
+		--prefix=${CROSSTOOLS_DIR} \
+		--with-sysroot=${T_SYSROOT} \
+		--target=${T_TRIPLET} \
 		--disable-nls \
 		--disable-werror
 	assert_zero $?

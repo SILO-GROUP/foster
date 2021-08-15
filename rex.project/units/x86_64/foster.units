@@ -25,6 +25,45 @@
 			"group":		"royalty",
 			"shell":		"/bin/bash",
 			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"stage, compile, install gcc",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/gcc.bash --pass1",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"stage, build, install linux api headers",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/linux.bash --pass1",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"stage, build, install glibc",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/glibc.bash --pass1",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
 		}
 	]
 }

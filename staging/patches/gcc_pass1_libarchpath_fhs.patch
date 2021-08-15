@@ -5,8 +5,8 @@ Origin:                  Implementation of an FHS convention
 Description:             Sets default directory name for 64-bit 
                          libraries to /lib in gcc for pass1
 
---- gcc/gcc/config/i386/t-linux64	2020-07-23 02:35:17.400385168 -0400
-+++ gcc/gcc/config/i386/t-linux64	2021-07-27 00:25:31.075882858 -0400
+--- gcc/config/i386/t-linux64	2020-07-23 02:35:17.400385168 -0400
++++ gcc/config/i386/t-linux64	2021-07-27 00:25:31.075882858 -0400
 @@ -33,6 +33,6 @@
  comma=,
  MULTILIB_OPTIONS    = $(subst $(comma),/,$(TM_MULTILIB_CONFIG))

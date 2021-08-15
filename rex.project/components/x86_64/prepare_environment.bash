@@ -131,6 +131,9 @@ logprint "Taking ownership of '$CROSSTOOLS_DIR'"
 chown -vR ${BUILD_USER}:${BUILD_GROUP} ${CROSSTOOLS_DIR}
 assert_zero $?
 
+logprint "Taking ownership of ${T_SYSROOT}"
+chown -v ${BUILD_USER}:${BUILD_GROUP} ${T_SYSROOT}
+
 logprint "Taking ownership of '${T_SYSROOT}/{usr,lib,var,etc,bin,sbin}'"
 chown -vR ${BUILD_USER}:${BUILD_GROUP} ${T_SYSROOT}/{usr,lib,var,etc,bin,sbin}
 assert_zero $?
@@ -138,5 +141,3 @@ assert_zero $?
 logprint "Taking ownership of '$ARCHLIB_DIR'"
 chown -vR ${BUILD_USER}:${BUILD_GROUP} ${ARCHLIB_DIR}
 assert_zero $?
-
-read -rsp $'Press any key to continue...\n' -n1 key
