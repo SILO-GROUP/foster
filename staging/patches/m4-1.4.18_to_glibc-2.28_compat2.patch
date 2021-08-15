@@ -1,0 +1,14 @@
+Submitted by:            Chris Punches <chris.punches@silogroup.org>
+Date:                    2021-08-15
+Initial Package Version: 1.4.18
+Origin:                  LFS 6.2 M4 Modification Set 2
+Description:             Glibc 2.28 made _IO_IN_BACKUP private.  This
+						 is a workaround by defining it locally.
+
+--- m4/lib/stdio-impl.h	2016-12-31 08:54:42.000000000 -0500
++++ m4/lib/stdio-impl.h	2021-08-15 15:00:40.816178352 -0400
+@@ -138,3 +138,4 @@
+ # define _IOERR   0x10
+ 
+ #endif
++#define _IO_IN_BACKUP 0x100

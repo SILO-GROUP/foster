@@ -1,7 +1,7 @@
 {
 	"units": [
 		{
-			"name":			"prepare host environment",
+			"name":			"prepare host environment - ubuntu",
 			"active":		true,
 			"required":		true,
 			"target":		"components/x86_64/prepare_environment.bash",
@@ -70,6 +70,32 @@
 			"active":		true,
 			"required":		true,
 			"target":		"components/x86_64/gcc.bash --libstdcxx",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"stage, build, install m4",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/m4.bash --all_temp",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"stage, build, install ncurses",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/ncurses.bash --all_temp",
 			"rectify":		false,
 			"rectifier":	"",
 			"log":			true,

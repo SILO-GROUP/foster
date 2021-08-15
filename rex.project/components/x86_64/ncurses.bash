@@ -10,12 +10,10 @@ set -a
 # Configuration:
 # ----------------------------------------------------------------------
 # the name of this application
-APPNAME="gcc"
+APPNAME="ncurses"
 
 # the version of this application
-#VERSION="6.2.0"
-#VERSION="9.4.0"
-VERSION="10.2.0"
+VERSION="6.2"
 
 # ----------------------------------------------------------------------
 # Variables and functions sourced from Environment:
@@ -32,18 +30,18 @@ VERSION="10.2.0"
 # register mode selections
 ARGUMENT_LIST=(
     "stage"
-    "build_pass1"
-    "install_pass1"
-    "pass1"
+    "build_temp"
+    "install_temp"
+    "all_temp"
     "help"
 )
 
 # modes to associate with switches
 # assumes you want nothing done unless you ask for it.
 MODE_STAGE=false
-MODE_BUILD_PASS1=false
-MODE_INSTALL_PASS1=false
-MODE_PASS1=false
+MODE_BUILD_TEMP=false
+MODE_INSTALL_TEMP=false
+MODE_ALL_TEMP=false
 MODE_HELP=false
 
 # the file to log to
@@ -76,16 +74,16 @@ while [[ $# -gt 0 ]]; do
             MODE_STAGE=true
             shift 1
             ;;
-        --build_pass1)
-            MODE_BUILD_PASS1=true
+        --build_temp)
+            MODE_BUILD_TEMP=true
             shift 1
             ;;
-        --install_pass1)
-            MODE_INSTALL_PASS1=true
+        --install_temp)
+            MODE_INSTALL_TEMP=true
             shift 1
             ;;
-        --pass1)
-            MODE_PASS1=true
+        --all_temp)
+            MODE_ALL_TEMP=true
             shift 1
             ;;
         --help)
@@ -121,111 +119,104 @@ mode_stage() {
 
 	# conditionally rename if it needs it
 	stat "${T_SOURCE_DIR}-"* && mv "${T_SOURCE_DIR}-"* "${T_SOURCE_DIR}"
-	
-
-	pushd ${T_SOURCE_DIR}
-	assert_zero $?
-
-	# MPFR
-	logprint "Extracting MPFR"
-	tar xf "${SOURCES_DIR}/mpfr-4.1.0.tar.xz" -C "${T_SOURCE_DIR}"
-	assert_zero $?
-	
-	logprint "Staging MPFR"
-	mv "${T_SOURCE_DIR}/mpfr-"* "${T_SOURCE_DIR}/mpfr"
-	assert_zero $?
-
-	# GMP
-	logprint "Extracting GMP"
-	tar xf "${SOURCES_DIR}/gmp-6.2.1.tar.xz" -C "${T_SOURCE_DIR}"
-	assert_zero $?
-	
-	logprint "Staging GMP"
-	mv "${T_SOURCE_DIR}/gmp-"* "${T_SOURCE_DIR}/gmp"
-	assert_zero $?
-
-	# MPC
-	logprint "Extracting MPC"
-	tar xf "${SOURCES_DIR}/mpc-1.2.1.tar.gz" -C "${T_SOURCE_DIR}"
-	assert_zero $?
-	
-	logprint "Staging MPC"
-	mv "${T_SOURCE_DIR}/mpc-"* "${T_SOURCE_DIR}/mpc"
-	assert_zero $?
-
 
 	logprint "Staging operation complete."
 }
 
 # when the build_pass1 mode is enabled, this will execute
-mode_build_pass1() {
-	logprint "Starting build of LIBSTDC++..."
+mode_build_temp() {
 	
-	logprint "Entering build dir."	
+	# patch, configure and build
+	logprint "Starting build of ${APPNAME}..."
+	
+	logprint "Entering stage dir."	
 	pushd "${T_SOURCE_DIR}"
 	assert_zero $?
 	
+	# patches
+	logprint "Applying patches..."
+	patch -p1 < "${PATCHES_DIR}/ncurses-6.2_ensure-gawk-over-mawk.patch"
+	assert_zero $?
+
+	logprint "Entering temporary build subdirectory..."
 	mkdir -p build
 	pushd build
 	assert_zero $?
 	
-	logprint "Configuring libstdc++..."
-	../libstdc++-v3/configure \
-		--host=${T_TRIPLET} \
-		--build=$(../config.guess) \
+	logprint "Building the tic progam..."
+	../configure
+	assert_zero $?
+	
+	logprint "Building includes..."
+	make -C include
+	assert_zero $?
+	
+	logprint "Building tic"
+	make -C progs tic
+	assert_zero $?
+	
+	popd
+				
+	logprint "Configuring ${APPNAME}..."
+	./configure \
 		--prefix=/usr \
-		--disable-multilib \
-		--disable-nls \
-		--disable-libstdcxx-pch \
-		--with-gxx-include-dir=
+		--host=${T_TRIPLET} \
+		--build=$(./config.guess) \
+		--mandir=/usr/share/man \
+		--with-manpage-format=normal \
+		--with-shared \
+		--without-debug \
+		--without-ada \
+		--without-normal \
+		--enable-widec
 	assert_zero $?
 	
 	logprint "Compiling..."
 	make
 	assert_zero $?
-
+	
 	logprint "Build operation complete."
 }
 
-mode_install_pass1() {
+mode_install_temp() {
 	logprint "Starting install of ${APPNAME}..."
-	pushd "${T_SOURCE_DIR}/build"
-	assert_zero $?
-	
-	make install
-	assert_zero $?
-	
-	logprint "Install operation complete."
-	
-	logprint "Wrapping up headers..."
-	dirs -c
 	pushd "${T_SOURCE_DIR}"
 	assert_zero $?
 	
-	cat gcc/limitx.h gcc/glimits.h gcc/limity.h > `dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/install-tools/include/limits.h
+	logprint "Installing..."
+	make DESTDIR=${T_SYSROOT} TIC_PATH=$(pwd)/build/progs/tic install
 	assert_zero $?
+
+	logprint "Cleaning up installation..."
+	logprint "Moving ncursesw shared objects from /usr/lib to /lib in T_SYSROOT."
+	mv -v ${T_SYSROOT}/usr/lib/libncursesw.so.6* ${T_SYSROOT}/lib
+	assert_zero $?
+	
+	logprint "Cleaning up symlinks broken by previous."
+	ln -sfv ../../lib/$(readlink ${T_SYSROOT}/usr/lib/libncursesw.so) ${T_SYSROOT}/usr/lib/libncursesw.so
+	assert_zero $?
+	
+	logprint "Install operation complete."
 }
 
 
 mode_help() {
-	echo "${APPNAME} [ --stage ] [ --build_pass1 ] [ --install_pass1 ] [ --pass1 ] [ --help ]"
+	echo "${APPNAME} [ --stage ] [ --build_temp ] [ --install_temp ] [ --all_temp ] [ --help ]"
 	exit 0
 }
 
-# MODE_PASS1 is a meta toggle for all pass1 modes.  Modes will always 
-# run in the correct order.
-if [ "$MODE_PASS1" = "true" ]; then
+if [ "$MODE_ALL_TEMP" = "true" ]; then
 	MODE_STAGE=true
-	MODE_BUILD_PASS1=true
-	MODE_INSTALL_PASS1=true
+	MODE_BUILD_TEMP=true
+	MODE_INSTALL_TEMP=true
 fi
 
 # if no options were selected, then show help and exit
 if \
 	[ "$MODE_HELP" != "true" ] && \
 	[ "$MODE_STAGE" != "true" ] && \
-	[ "$MODE_BUILD_PASS1" != "true" ] && \
-	[ "$MODE_INSTALL_PASS1" != "true" ]
+	[ "$MODE_BUILD_TEMP" != "true" ] && \
+	[ "$MODE_INSTALL_TEMP" != "true" ]
 then
 	logprint "No option selected during execution."
 	mode_help
@@ -243,15 +234,15 @@ if [ "$MODE_STAGE" = "true" ]; then
 	assert_zero $?
 fi
 
-if [ "$MODE_BUILD_PASS1" = "true" ]; then
-	logprint "Build of PASS1 selected."
-	mode_build_pass1
+if [ "$MODE_BUILD_TEMP" = "true" ]; then
+	logprint "Build of ${APPNAME} selected."
+	mode_build_temp
 	assert_zero $?
 fi
 
-if [ "$MODE_INSTALL_PASS1" = "true" ]; then
-	logprint "Install of PASS1 selected."
-	mode_install_pass1
+if [ "$MODE_INSTALL_TEMP" = "true" ]; then
+	logprint "Install of ${APPNAME} selected."
+	mode_install_temp
 	assert_zero $?
 fi
 

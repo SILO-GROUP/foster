@@ -1,0 +1,18 @@
+Submitted by:            Chris Punches <chris.punches@silogroup.org>
+Date:                    2021-08-15
+Initial Package Version: 6.2
+Origin:                  LFS 6.3
+Description:             Ensures gawk is used over mawk during execution
+						 of configure script.
+
+--- ncurses/configure	2020-02-08 16:06:19.000000000 -0500
++++ ncurses/configure	2021-08-15 17:38:57.014762712 -0400
+@@ -3483,7 +3483,7 @@
+ program_transform_name=`echo $program_transform_name | sed -f conftest.sed`
+ rm conftest.sed
+ 
+-for ac_prog in mawk gawk nawk awk
++for ac_prog in  gawk nawk awk
+ do
+   # Extract the first word of "$ac_prog", so it can be a program name with args.
+ set dummy $ac_prog; ac_word=$2

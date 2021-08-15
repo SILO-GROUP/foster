@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Description:
-# This file is sourced by Examplar prior to each task execution.
+# This file is sourced by Rex prior to each task execution.
 #
 # We additionally source various files to keep management of these sane.
 
@@ -48,7 +48,7 @@ PATH=${CROSSTOOLS_DIR}/bin:$PATH
 # Compatibility
 LFS=${T_SYSROOT}
 LFS_TGT=${T_TRIPLET}
-CONFIG_SITE=$LFS/usr/share/config.site
+CONFIG_SITE=${T_SYSROOT}/usr/share/config.site
 
 MAKEFLAGS="-j$(nproc)"
 
