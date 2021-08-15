@@ -1,7 +1,7 @@
 {
 	"units": [
 		{
-			"name":			"prepare environment",
+			"name":			"prepare host environment",
 			"active":		true,
 			"required":		true,
 			"target":		"components/x86_64/prepare_environment.bash",
