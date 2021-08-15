@@ -3,7 +3,7 @@ An experimental fork of the SURRO/Foster project to examine using the
 Rex utility to automate parts of the LFS toolchain generation.  
 
 # Requirements
-Make, g++, and Rex ( installed at /usr/local/bin/rex ).
+Make, g++, and Rex ( installed at `/usr/local/bin/rex` ).
 
 Tested on Ubuntu 20.04
 
