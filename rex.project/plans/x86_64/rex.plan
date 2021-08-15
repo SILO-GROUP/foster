@@ -24,8 +24,13 @@
 		{
 			"name":"stage, build, install glibc", 
 			"dependencies": [ null ],
-			"comment": "5.4"
-		}
+			"comment": "5.5"
+		},
+		{
+			"name":"build, install libstdcxx", 
+			"dependencies": [ null ],
+			"comment": "5.6"
+		}		
 	]
 }
 

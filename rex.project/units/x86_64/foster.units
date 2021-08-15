@@ -64,6 +64,19 @@
 			"group":		"royalty",
 			"shell":		"/bin/bash",
 			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"build, install libstdcxx",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/gcc.bash --libstdcxx",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
 		}
 	]
 }
