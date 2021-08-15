@@ -24,11 +24,11 @@ clean the sources dir.
 ## make download_sources
 download the sources
 
-# make download_patches
+## make download_patches
 download the patches
 
-# make verify_sources
+## make verify_sources
 verify the sources' checksums for file integrity verification
 
-# make verify_patches
+## make verify_patches
 verify the patches' file integrity
