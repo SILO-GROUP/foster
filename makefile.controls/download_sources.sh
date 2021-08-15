@@ -5,7 +5,7 @@
 wget \
 	-q \
 	--show-progress \
-	--input-file=${workspace}/staging/source/10.1_sources.txt \
+	--input-file=${workspace}/staging/sources/10.1_sources.txt \
 	--continue \
-	--directory-prefix=${workspace}/staging/source
+	--directory-prefix=${workspace}/staging/sources
 

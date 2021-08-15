@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rm -Rfv $workspace/staging/source/*tar*
-rm -Rfv $workspace/staging/source/*patch
+rm -Rfv $workspace/staging/sources/*tar*
+rm -Rfv $workspace/staging/sources/*patch

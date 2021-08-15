@@ -1,13 +1,32 @@
 #!/bin/bash
 
 # desc:
-# stages, builds, installs binutils for Foster
+# stages, builds, installs
 
 # make variables persist in subprocesses for logging function
 set -a
 
+# ----------------------------------------------------------------------
+# Configuration:
+# ----------------------------------------------------------------------
+# the name of this application
+APPNAME="binutils"
+
+# the version of this application
 #APP_VERSION="2.25"
 APP_VERSION="2.36.1"
+
+# ----------------------------------------------------------------------
+# Variables and functions sourced from Environment:
+# ----------------------------------------------------------------------
+# assert_zero()
+# Checks if $1 is 0.  If non-0 value, halts the execution of the script.
+#
+# LOGS_ROOT
+# The parent directory where logs from this project will go.
+#
+# TEMP_STAGE_DIR
+# The parent directory of where source archives are extracted to.
 
 # register mode selections
 ARGUMENT_LIST=(
@@ -26,23 +45,19 @@ MODE_INSTALL_PASS1=false
 MODE_PASS1=false
 MODE_HELP=false
 
-# the name of this application
-APPNAME="$(basename "$0")"
-
 # the file to log to
 LOGFILE="${APPNAME}.log"
-
-# base dir where logs will go
-# HIGH_LOGS sourced from environment
-LOG_BASE_PATH="${HIGH_LOGS}"
 
 # ISO 8601 variation
 TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
 
 # the path where logs are written to
-LOG_DIR="${LOG_BASE_PATH}/${APPNAME}-${TIMESTAMP}"
+# note: LOGS_ROOT is sourced from environment
+LOG_DIR="${LOGS_ROOT}/${APPNAME}-${TIMESTAMP}"
 
-STAGE_DIR="${BUILD_DIR}/binutils"
+# the path where the source will be located when complete
+# note: TEMP_STAGE_DIR is sourced from environment
+T_SOURCE_DIR="${TEMP_STAGE_DIR}/${APPNAME}"
 
 # read defined arguments
 opts=$(getopt \
@@ -92,44 +107,32 @@ logprint() {
 # Tell the user we're alive...
 logprint "Initializing the ${APPNAME} utility..."
 
-# assert a value is zero or exit the script
-assert_zero() {
-	if [[ "$1" -eq 0 ]]; then
-		return
-	else
-		logprint "Assertion Zero failed. Exited with a value of '$1'."
-		exit 1
-	fi
-}
-
+# when the stage mode is enabled, this will execute
 mode_stage() {
 	logprint "Starting stage of ${APPNAME}..."
 
 	logprint "Removing any pre-existing staging for ${APPNAME}."
-	rm -Rf "${BUILD_DIR}/binutils*"
+	rm -Rf "${T_SOURCE_DIR}"*
 
-	# SOURCES_DIR and BUILD_DIR are environment variables when the 
-	# script is executed
-	logprint "source archive: ${SOURCES_DIR}/binutils-2.36.1.tar.xz"
-	logprint "BUILD_DIR: ${BUILD_DIR}"
-	
-	tar xvf "${SOURCES_DIR}/binutils-${APP_VERSION}.tar."* -C "${BUILD_DIR}"
+	logprint "Extracting ${APPNAME}-${VERSION} source archive to ${TEMP_STAGE_DIR}"
+	tar xf "${SOURCES_DIR}/${APPNAME}-${APP_VERSION}.tar."* -C "${TEMP_STAGE_DIR}"
 	assert_zero $?
 
 	# conditionally rename if it needs it
-	stat ${BUILD_DIR}/binutils-* && mv ${BUILD_DIR}/binutils-* ${BUILD_DIR}/binutils
+	stat "${T_SOURCE_DIR}-"* && mv "${T_SOURCE_DIR}-"* "${T_SOURCE_DIR}"
 
 	logprint "Staging operation complete."
 }
 
+# when the build_pass1 mode is enabled, this will execute
 mode_build_pass1() {
 	logprint "Starting build of ${APPNAME}..."
 	
 	logprint "Entering build dir."	
-	pushd "${STAGE_DIR}"
+	pushd "${T_SOURCE_DIR}"
+	
+	# sourced from environment:  checks $? -- aborts script execution if non-zero
 	assert_zero $?
-
-
 
 	mkdir -p build
 	pushd build
@@ -137,28 +140,26 @@ mode_build_pass1() {
 	
 	logprint "Configuring binutils..."
 	../configure \
-		--prefix=$CX_DIR \
-		--with-sysroot=$LFS \
-		--target=$LFS_TGT \
+		--prefix=$CROSSTOOLS_DIR \
+		--with-sysroot=$T_SYSROOT \
+		--target=$T_TRIPLET \
 		--disable-nls \
 		--disable-werror
-		
 	assert_zero $?
 	
 	logprint "Compiling..."
-
-	make -j1
-	assert_zero $?	
+	make
+	assert_zero $?
 
 	logprint "Build operation complete."
 }
 
 mode_install_pass1() {
 	logprint "Starting install of ${APPNAME}..."
-	pushd "${STAGE_DIR}/build"
+	pushd "${T_SOURCE_DIR}/build"
 	assert_zero $?
 	
-	make install -j1
+	make install
 	assert_zero $?
 	
 	logprint "Install operation complete."

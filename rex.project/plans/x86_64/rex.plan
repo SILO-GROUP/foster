@@ -2,49 +2,14 @@
 	"plan":
 	[
 		{
-			"name":"prepare environment", 
+			"name":"prepare host environment", 
 			"dependencies": [ null ],
 			"comment": "create directories and users necessary to build"
 		},
 		{
-			"name":"stage and build cross binutils pass1", 
+			"name":"stage, compile, install binutils", 
 			"dependencies": [ null ],
 			"comment": "5.2.1 of https://www.linuxfromscratch.org/lfs/downloads/stable-systemd/LFS-BOOK-10.1-systemd-NOCHUNKS.html"
-		},
-		{
-			"name":"install cross binutils pass1", 
-			"dependencies": [ null ],
-			"comment": "5.2.1 of https://www.linuxfromscratch.org/lfs/downloads/stable-systemd/LFS-BOOK-10.1-systemd-NOCHUNKS.html"
-		},
-		{
-			"name":"stage and build cross gcc pass1", 
-			"dependencies": [ null ],
-			"comment": "5.3 of https://www.linuxfromscratch.org/lfs/downloads/stable-systemd/LFS-BOOK-10.1-systemd-NOCHUNKS.html"
-		},
-		{
-			"name":"install cross gcc pass1", 
-			"dependencies": [ null ],
-			"comment": "5.3 of https://www.linuxfromscratch.org/lfs/downloads/stable-systemd/LFS-BOOK-10.1-systemd-NOCHUNKS.html"
-		},
-		{
-			"name":"stage and build linux api headers", 
-			"dependencies": [ null ],
-			"comment": "5.3 of https://www.linuxfromscratch.org/lfs/downloads/stable-systemd/LFS-BOOK-10.1-systemd-NOCHUNKS.html"
-		},
-		{
-			"name":"install linux api headers", 
-			"dependencies": [ null ],
-			"comment": "5.3 of https://www.linuxfromscratch.org/lfs/downloads/stable-systemd/LFS-BOOK-10.1-systemd-NOCHUNKS.html"
-		},
-		{
-			"name":"stage and build glibc", 
-			"dependencies": [ null ],
-			"comment": "5.3 of https://www.linuxfromscratch.org/lfs/downloads/stable-systemd/LFS-BOOK-10.1-systemd-NOCHUNKS.html"
-		},
-		{
-			"name":"install glibc", 
-			"dependencies": [ null ],
-			"comment": "5.3 of https://www.linuxfromscratch.org/lfs/downloads/stable-systemd/LFS-BOOK-10.1-systemd-NOCHUNKS.html"
 		}
 	]
 }

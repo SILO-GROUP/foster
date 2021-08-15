@@ -1,98 +1,133 @@
 #!/bin/bash
 #
-#    Foster - Installer ISO for SURRO Linux.
-#
-#    © SURRO INDUSTRIES and Chris Punches, 2017.
-#
-#    This program is free software: you can redistribute it and/or 
-#    modify it under the terms of the GNU Affero General Public License
-#    as published by the Free Software Foundation, either version 3 of 
-#    the License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public 
-#    License along with this program.  If not, see 
-#    <https://www.gnu.org/licenses/>.
-#
 # Description:
 # This component lays out all the directories and users and permissions
 # needed to compile the rest of the project.
+env
+assert_zero $?
 
-# - creates empty sysroot
-# - creates crosstools dir
-# - creates source build dir
-# - creates build group
-# - creates build user
-# - sets ownership of build dir to build user
+# The Application Name
+APPNAME="PREPARE_HOST"
 
+# ISO 8601 variation
+TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
+
+# the path where logs are written to
+# note: LOGS_ROOT is sourced from environment
+LOG_DIR="${LOGS_ROOT}/${APPNAME}-${TIMESTAMP}"
+
+# print to stdout, print to log
+logprint() {
+	mkdir -p "${LOG_DIR}"
+	echo "[$(date +%Y-%m-%d_%H:%M:%S)] [${APPNAME}] $1" \
+	| tee -a "${LOG_DIR}/${LOGFILE}"
+}
+
+logprint "Clearing BASHRC"
 # clean the environment just in case
 [ ! -e /etc/bash.bashrc ] || mv -v /etc/bash.bashrc /etc/bash.bashrc.NOUSE
 
-mkdir -p ${BUILD_DIR}
+# ----------------------------------------------------------------------
+# Install Host Dependencies
+# ----------------------------------------------------------------------
+logprint "Installing host dependencies..."
+apt-get install -y yacc xz-utils file bison bzip2 gawk texinfo python3 rsync gettext m4
 assert_zero $?
 
-# create the user's group
+# ----------------------------------------------------------------------
+# Set up binary symlinks
+# ----------------------------------------------------------------------
+logprint "Setting BISON->YACC symlink"
+# yacc must point to bison
+ln -sfv /usr/bin/bison /usr/bin/yacc
+assert_zero $?
+
+logprint "Setting AWK->GAWK symlink"
+# awk must point to gawk
+ln -sfv /usr/bin/gawk /usr/bin/awk 
+assert_zero $?
+
+logprint "Setting SH->BASH symlink"
+# sh must point to bash
+ln -sfv /bin/bash /bin/sh
+assert_zero $?
+
+# ----------------------------------------------------------------------
+# Create SYSROOT directories
+# ----------------------------------------------------------------------
+logprint "Creating SYSROOT directories..."
+# create empty dirs for the target sysroot
+logprint "Generating basic top-level directories"
+mkdir -pv ${T_SYSROOT}/{bin,etc,lib,sbin,usr,var} 
+assert_zero $?
+
+#logprint "Generating secondary SYSROOT directories..."
+# secondaries
+#mkdir -pv ${T_SYSROOT}/{boot,home,usr/src,opt,tmp}
+#assert_zero $?
+
+logprint "Generating architecture dependent lib dir..."
+# target dependent
+# create lib64 dir for the target sysroot
+mkdir -pv ${ARCHLIB_DIR} 
+assert_zero $?
+
+logprint "Generating crosstools root dir..."
+# dir for where the cross-compiler will go that builds the things inside
+# the target sysroot
+mkdir -pv ${CROSSTOOLS_DIR}
+assert_zero $?
+
+# ----------------------------------------------------------------------
+# Create build user/group
+# ----------------------------------------------------------------------
+logprint "Creating BUILD GROUP '${BUILD_GROUP}'"
 getent group "${BUILD_GROUP}" \
 	|| groupadd "${BUILD_GROUP}"
 assert_zero $?
 
+logprint "Creating BUILD USER '${BUILD_USER}'"
 # create the user
-getent passwd "${BUILD_USER}" \
+getent passwd ${BUILD_USER} \
 	|| useradd \
 		-m \
 		-s /bin/bash \
-		-g "${BUILD_GROUP}" \
-		-d "${BUILD_DIR}" \
+		-g ${BUILD_GROUP} \
+		-d ${TEMP_STAGE_DIR} \
 		-k /dev/null \
-		"${BUILD_USER}"
+		${BUILD_USER}
 assert_zero $?
 
-# create empty dirs for the target sysroot
-mkdir -p ${TARGET_SYSROOT}/{bin,etc,lib,sbin,usr,var} 
+# ----------------------------------------------------------------------
+# Chown SYSROOT directories
+# ----------------------------------------------------------------------
+logprint "Taking ownership of '$TEMP_STAGE_DIR'"
+chown -vR "${BUILD_USER}":"${BUILD_GROUP}" "${TEMP_STAGE_DIR}"
 assert_zero $?
 
-# secondaries
-mkdir -p ${TARGET_SYSROOT}/{boot,home,usr/src,opt,tmp}
-assert_zero $?
-
-# target dependent
-# create lib64 dir for the target sysroot
-mkdir -p ${ARCHLIB_DIR} 
-assert_zero $?
-
-# dir for where the cross-compiler will go that builds the things inside
-# the target sysroot
-mkdir -p ${CX_DIR}
-assert_zero $?
-
-
-
-# change ownership on the build_dir
-chown -vR "${BUILD_USER}":"${BUILD_GROUP}" "${BUILD_DIR}"
-assert_zero $?
-
-# change ownership on the sysroot's arch dependent lib dir
+logprint "Taking ownership of '$ARCHLIB_DIR'"
 chown -vR "${BUILD_USER}":"${BUILD_GROUP}" "${ARCHLIB_DIR}"
 assert_zero $?
 
+logprint "Ensuring permissions on '$SOURCES_DIR'"
 # change ownership on the sources dir
 chmod 777 "${SOURCES_DIR}"
-#assert_zero $?
+assert_zero $?
 
-mkdir -p "${HIGH_LOGS}"
-chmod -vR 777 "${HIGH_LOGS}"
+logprint "Creating and owning '$LOGS_ROOT'"
+mkdir -pv "${LOGS_ROOT}"
+assert_zero $?
+chmod -vR 777 "${LOGS_ROOT}"
+assert_zero $?
 
-chown -vR "${BUILD_USER}":"${BUILD_GROUP}" "${CX_DIR}"
+logprint "Taking ownership of '$CROSSTOOLS_DIR'"
+chown -vR ${BUILD_USER}:${BUILD_GROUP} ${CROSSTOOLS_DIR}
+assert_zero $?
 
-chown -vR "${BUILD_USER}":"${BUILD_GROUP}" ${TARGET_SYSROOT}/{usr,lib,var,etc,bin,sbin}
-chown -vR "${BUILD_USER}":"${BUILD_GROUP}" ${ARCHLIB_DIR}
+logprint "Taking ownership of '${T_SYSROOT}/{usr,lib,var,etc,bin,sbin}'"
+chown -vR ${BUILD_USER}:${BUILD_GROUP} ${T_SYSROOT}/{usr,lib,var,etc,bin,sbin}
+assert_zero $?
 
-umask 022
-
-ln -sfv /usr/bin/bison /usr/bin/yacc
-ln -sfv /usr/bin/gawk /usr/bin/awk 
-ln -sfv /bin/bash /bin/sh
+logprint "Taking ownership of '$ARCHLIB_DIR'"
+chown -vR ${BUILD_USER}:${BUILD_GROUP} ${ARCHLIB_DIR}
+assert_zero $?

@@ -1,5 +1,4 @@
 #!/bin/bash
 
-rm -Rfv $workspace/output
-rm -Rfv $workspace/sources/cache
+rm -Rfv $workspace/T_SYSROOT
 sudo rm -Rfv $workspace/logs

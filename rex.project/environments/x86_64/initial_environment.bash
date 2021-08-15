@@ -1,22 +1,5 @@
 #!/bin/bash
 #
-#    Foster - Installer ISO for SURRO Linux.
-#
-#    © SURRO INDUSTRIES and Chris Punches, 2017.
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
 # Description:
 # This file is sourced by Examplar prior to each task execution.
 #
@@ -24,66 +7,15 @@
 
 # Automatically export stuff so we don't have to do it explicitly
 set -a
-
-# disable caching of paths in which executables are located when they
-# are called
 set +h
-
 umask 022
-
-# Set a basic terminal
-TERM=xterm-256color
-
-# override LC_ALL for each build
 LC_ALL=POSIX
-#LC_ALL=C
-
-# where this project is cloned to
-WORKSPACE=/opt/foster
-
-HIGH_LOGS="${WORKSPACE}/logs/scripts/"
-
-# A mutable directory in the shared volume so that inspection can occur
-# between builds.
-OUTDIR=/home/bagira/ALFS_OUTPUT
-
-## the SYSROOT directory that will eventually be the chroot
-TARGET_SYSROOT=${OUTDIR}/SYSROOT
-
-ARCHLIB_DIR=${TARGET_SYSROOT}/lib64
-
-# cross build tools used to build the build tools in X_DIR
-CX_DIR=/${TARGET_SYSROOT}/cross-compiler
-
-# native build tools used to populate FOSTER_ROOT
-X_DIR=/${TARGET_SYSROOT}/target-compiler
-
-# the directory where staged files go.  these are user supplied.
-EXT_STAGING_DIR=${WORKSPACE}/staging
-
-# sources
-# storage directory for source code for everything as its being built
-SOURCES_DIR=${EXT_STAGING_DIR}/source
-
-# where the sources are built
-BUILD_DIR=${OUTDIR}/temporary_build_directory
-
-# patches
-# storage directory for patches
-PATCH_DIR=${EXT_STAGING_DIR}/patches
-
-# the home directory of our non-root build user
-# needs to match BUILD_DIR, this is an environment var that the
-# shell will look for
-HOME=${BUILD_DIR}
-
-# builder user and group settings
-BUILD_GROUP=royalty
-BUILD_USER=phanes
 
 # fail the unit in the event of a non-zero value passed
 # used primarily to check exit codes on previous commands
+# also a great convenient place to add in a "press any key to continue"
 assert_zero() {
+	read -rsp $'Press any key to continue...\n' -n1 key
 	if [[ "$1" -eq 0 ]]; then 
 		return
 	else
@@ -91,30 +23,33 @@ assert_zero() {
 	fi
 }
 
-# configure script hack
-CONFIG_SITE=${TARGET_SYSROOT}/usr/share/config.site
+PROJECT_ROOT=/opt/foster
 
-# makeflags
-MAKEFLAGS='-j22'
+SOURCES_DIR=${PROJECT_ROOT}/staging/sources
+PATCHES_DIR=${PROJECT_ROOT}/staging/patches
 
+T_SYSROOT=${PROJECT_ROOT}/T_SYSROOT
+LOGS_ROOT=${PROJECT_ROOT}/logs/scripts
 
-TARCH=x86_64
-VENDOR=lfs
-TARGET_ARCH=${TARCH}-${VENDOR}-linux-gnu
+CROSSTOOLS_DIR=${T_SYSROOT}/crosstools
+TEMP_STAGE_DIR=${T_SYSROOT}/source_stage
+ARCHLIB_DIR=${T_SYSROOT}/lib64
 
-# questionable LFS hack
-CONFIG_SITE=${TARGET_SYSROOT}/usr/share/config.site
+T_VENDOR="rhl"
+T_TRIPLET=$(uname -m)-${T_VENDOR}-linux-gnu
 
-# path
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin
+BUILD_USER="phanes"
+BUILD_GROUP="royalty"
+
+PATH=/usr/bin
 if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
-PATH=$CX_DIR/bin:$PATH
-
-PS1="\n[ \u @ \H ] << \w >>\n\n[- "
+PATH=${CROSSTOOLS_DIR}/bin:$PATH
 
 # Compatibility
-LFS=${TARGET_SYSROOT}
-LFS_TGT=${TARGET_ARCH}
+LFS=${T_SYSROOT}
+LFS_TGT=${T_TRIPLET}
+CONFIG_SITE=$LFS/usr/share/config.site
 
+MAKEFLAGS="-j$(nproc)"
 
 echo "Loaded Initial Environment"
