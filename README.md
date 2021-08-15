@@ -4,9 +4,11 @@ Rex utility to automate parts of the LFS toolchain generation.
 
 # Requirements
 Make, g++, and Rex ( installed at /usr/local/bin/rex ).
+
 Tested on Ubuntu 20.04
 
 Rex source: https://github.com/SILO-GROUP/Rex
+
 Assumes you cloned the project to `/opt/foster`
 
 # makefile Driven
