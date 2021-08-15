@@ -16,6 +16,9 @@ TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
 # note: LOGS_ROOT is sourced from environment
 LOG_DIR="${LOGS_ROOT}/${APPNAME}-${TIMESTAMP}"
 
+# the file to log to
+LOGFILE="${APPNAME}.log"
+
 # print to stdout, print to log
 logprint() {
 	mkdir -p "${LOG_DIR}"
@@ -31,7 +34,7 @@ logprint "Clearing BASHRC"
 # Install Host Dependencies
 # ----------------------------------------------------------------------
 logprint "Installing host dependencies..."
-apt-get install -y yacc xz-utils file bison bzip2 gawk texinfo python3 rsync gettext m4
+apt-get install -y xz-utils file bison bzip2 gawk texinfo python3 rsync gettext m4
 assert_zero $?
 
 # ----------------------------------------------------------------------
@@ -78,18 +81,22 @@ logprint "Generating crosstools root dir..."
 mkdir -pv ${CROSSTOOLS_DIR}
 assert_zero $?
 
+logprint "Creating '$TEMP_STAGE_DIR'"
+mkdir -pv ${TEMP_STAGE_DIR}
+assert_zero $?
+
 # ----------------------------------------------------------------------
 # Create build user/group
 # ----------------------------------------------------------------------
 logprint "Creating BUILD GROUP '${BUILD_GROUP}'"
 getent group "${BUILD_GROUP}" \
-	|| groupadd "${BUILD_GROUP}"
+	|| /usr/sbin/groupadd "${BUILD_GROUP}"
 assert_zero $?
 
 logprint "Creating BUILD USER '${BUILD_USER}'"
 # create the user
 getent passwd ${BUILD_USER} \
-	|| useradd \
+	|| /usr/sbin/useradd \
 		-m \
 		-s /bin/bash \
 		-g ${BUILD_GROUP} \
@@ -131,3 +138,5 @@ assert_zero $?
 logprint "Taking ownership of '$ARCHLIB_DIR'"
 chown -vR ${BUILD_USER}:${BUILD_GROUP} ${ARCHLIB_DIR}
 assert_zero $?
+
+read -rsp $'Press any key to continue...\n' -n1 key

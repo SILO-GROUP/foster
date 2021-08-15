@@ -13,8 +13,8 @@ set -a
 APPNAME="binutils"
 
 # the version of this application
-#APP_VERSION="2.25"
-APP_VERSION="2.36.1"
+#VERSION="2.25"
+VERSION="2.36.1"
 
 # ----------------------------------------------------------------------
 # Variables and functions sourced from Environment:
@@ -115,7 +115,7 @@ mode_stage() {
 	rm -Rf "${T_SOURCE_DIR}"*
 
 	logprint "Extracting ${APPNAME}-${VERSION} source archive to ${TEMP_STAGE_DIR}"
-	tar xf "${SOURCES_DIR}/${APPNAME}-${APP_VERSION}.tar."* -C "${TEMP_STAGE_DIR}"
+	tar xf "${SOURCES_DIR}/${APPNAME}-${VERSION}.tar."* -C "${TEMP_STAGE_DIR}"
 	assert_zero $?
 
 	# conditionally rename if it needs it

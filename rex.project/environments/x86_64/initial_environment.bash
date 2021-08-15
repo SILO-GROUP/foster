@@ -15,7 +15,6 @@ LC_ALL=POSIX
 # used primarily to check exit codes on previous commands
 # also a great convenient place to add in a "press any key to continue"
 assert_zero() {
-	read -rsp $'Press any key to continue...\n' -n1 key
 	if [[ "$1" -eq 0 ]]; then 
 		return
 	else
