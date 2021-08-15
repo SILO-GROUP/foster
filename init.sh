@@ -9,7 +9,7 @@ ulimit -c unlimited
 # apt-get install newt
 
 # Executes rex from within the shell.
-/usr/bin/rex \
+/usr/local/bin/rex \
 	-c /opt/foster/rex.project/plans/x86_64/rex.config \
 	-p /opt/foster/rex.project/plans/x86_64/rex.plan
 
