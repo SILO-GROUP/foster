@@ -240,7 +240,7 @@ mode_build_pass1() {
 	../configure \
 		--target=${T_TRIPLET} \
 		--prefix=${CROSSTOOLS_DIR} \
-		--with-glibc-version=2.11 \
+		--with-glibc-version=2.31 \
 		--with-sysroot=${T_SYSROOT} \
 		--with-newlib \
 		--without-headers \
@@ -281,7 +281,7 @@ mode_install_pass1() {
 	pushd "${T_SOURCE_DIR}"
 	assert_zero $?
 	
-	cat gcc/limitx.h gcc/glimits.h gcc/limity.h > `dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/install-tools/include/limits.h
+	cat gcc/limitx.h gcc/glimits.h gcc/limity.h > `dirname $(${T_TRIPLET}-gcc -print-libgcc-file-name)`/install-tools/include/limits.h
 	assert_zero $?
 }
 

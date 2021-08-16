@@ -103,6 +103,19 @@
 			"group":		"royalty",
 			"shell":		"/bin/bash",
 			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"stage, build, install bash",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/bash.bash --all_temp",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
 		}
 	]
 }

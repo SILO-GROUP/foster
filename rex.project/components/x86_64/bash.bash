@@ -10,10 +10,10 @@ set -a
 # Configuration:
 # ----------------------------------------------------------------------
 # the name of this application
-APPNAME="ncurses"
+APPNAME="bash"
 
 # the version of this application
-VERSION="6.2"
+VERSION="5.1"
 
 # ----------------------------------------------------------------------
 # Variables and functions sourced from Environment:
@@ -133,44 +133,12 @@ mode_build_temp() {
 	pushd "${T_SOURCE_DIR}"
 	assert_zero $?
 	
-	# patches
-	logprint "Applying patches..."
-	patch -p1 < "${PATCHES_DIR}/ncurses-6.2_ensure-gawk-over-mawk.patch"
-	assert_zero $?
-
-	logprint "Entering temporary build subdirectory..."
-	mkdir -p build
-	pushd build
-	assert_zero $?
-	
-	logprint "Building the tic progam..."
-	../configure
-	assert_zero $?
-	
-	logprint "Building includes..."
-	make -C include
-	assert_zero $?
-	
-	logprint "Building tic"
-	make -C progs tic
-	assert_zero $?
-	
-	logprint "Exiting temp build subdir"
-	popd
-	assert_zero $?
-				
 	logprint "Configuring ${APPNAME}..."
 	./configure \
 		--prefix=/usr \
+		--build=$(support/config.guess) \
 		--host=${T_TRIPLET} \
-		--build=$(./config.guess) \
-		--mandir=/usr/share/man \
-		--with-manpage-format=normal \
-		--with-shared \
-		--without-debug \
-		--without-ada \
-		--without-normal \
-		--enable-widec
+		--without-bash-malloc
 	assert_zero $?
 	
 	logprint "Compiling..."
@@ -186,21 +154,17 @@ mode_install_temp() {
 	assert_zero $?
 	
 	logprint "Installing..."
-	make DESTDIR=${T_SYSROOT} TIC_PATH=$(pwd)/build/progs/tic install
+	make DESTDIR=${T_SYSROOT} install
 	assert_zero $?
-	
-	logprint "HACK: INPUT(-lncursesw)"
-	echo "INPUT(-lncursesw)" > ${T_SYSROOT}/usr/lib/libncurses.so
 
 	logprint "Cleaning up installation..."
-	logprint "Moving ncursesw shared objects from /usr/lib to /lib in T_SYSROOT."
-	mv -v ${T_SYSROOT}/usr/lib/libncursesw.so.6* ${T_SYSROOT}/lib
+	logprint "Moving /usr/bin/bash to /bin/bash"
+	mv ${T_SYSROOT}/usr/bin/bash ${T_SYSROOT}/bin/bash
 	assert_zero $?
 	
-	logprint "Cleaning up symlinks broken by previous."
-	ln -sfv ../../lib/$(readlink ${T_SYSROOT}/usr/lib/libncursesw.so) ${T_SYSROOT}/usr/lib/libncursesw.so
+	logprint "Creating /bin/sh->bash symlink for T_SYSROOT"
+	ln -sv bash ${T_SYSROOT}/bin/sh
 	assert_zero $?
-	
 	
 	
 	logprint "Install operation complete."

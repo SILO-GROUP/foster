@@ -40,6 +40,11 @@
 			"name":"stage, build, install ncurses", 
 			"dependencies": [ null ],
 			"comment": "6.3"
+		},		
+		{
+			"name":"stage, build, install bash", 
+			"dependencies": [ null ],
+			"comment": "6.4"
 		}		
 	]
 }

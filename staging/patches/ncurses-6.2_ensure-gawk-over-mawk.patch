@@ -12,7 +12,7 @@ Description:             Ensures gawk is used over mawk during execution
  rm conftest.sed
  
 -for ac_prog in mawk gawk nawk awk
-+for ac_prog in  gawk nawk awk
++for ac_prog in gawk nawk awk
  do
    # Extract the first word of "$ac_prog", so it can be a program name with args.
  set dummy $ac_prog; ac_word=$2
