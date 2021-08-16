@@ -10,11 +10,10 @@ set -a
 # Configuration:
 # ----------------------------------------------------------------------
 # the name of this application
-APPNAME="binutils"
+APPNAME="gawk"
 
 # the version of this application
-#VERSION="2.25"
-VERSION="2.36.1"
+VERSION="5.1.0"
 
 # ----------------------------------------------------------------------
 # Variables and functions sourced from Environment:
@@ -31,24 +30,18 @@ VERSION="2.36.1"
 # register mode selections
 ARGUMENT_LIST=(
     "stage"
-    "build_pass1"
-    "install_pass1"
-    "pass1"
-    "build_pass2"
-    "install_pass2"
-    "pass2"
+    "build_temp"
+    "install_temp"
+    "all_temp"
     "help"
 )
 
 # modes to associate with switches
 # assumes you want nothing done unless you ask for it.
 MODE_STAGE=false
-MODE_BUILD_PASS1=false
-MODE_INSTALL_PASS1=false
-MODE_PASS1=false
-MODE_BUILD_PASS2=false
-MODE_INSTALL_PASS2=false
-MODE_PASS2=false
+MODE_BUILD_TEMP=false
+MODE_INSTALL_TEMP=false
+MODE_ALL_TEMP=false
 MODE_HELP=false
 
 # the file to log to
@@ -81,28 +74,16 @@ while [[ $# -gt 0 ]]; do
             MODE_STAGE=true
             shift 1
             ;;
-        --build_pass1)
-            MODE_BUILD_PASS1=true
+        --build_temp)
+            MODE_BUILD_TEMP=true
             shift 1
             ;;
-        --install_pass1)
-            MODE_INSTALL_PASS1=true
+        --install_temp)
+            MODE_INSTALL_TEMP=true
             shift 1
             ;;
-        --pass1)
-            MODE_PASS1=true
-            shift 1
-            ;;
-        --build_pass2)
-            MODE_BUILD_PASS2=true
-            shift 1
-            ;;
-        --install_pass2)
-            MODE_INSTALL_PASS2=true
-            shift 1
-            ;;
-        --pass2)
-            MODE_PASS2=true
+        --all_temp)
+            MODE_ALL_TEMP=true
             shift 1
             ;;
         --help)
@@ -143,122 +124,59 @@ mode_stage() {
 }
 
 # when the build_pass1 mode is enabled, this will execute
-mode_build_pass1() {
+mode_build_temp() {
+	
+	# patch, configure and build
 	logprint "Starting build of ${APPNAME}..."
 	
-	logprint "Entering build dir."	
+	logprint "Entering stage dir."	
 	pushd "${T_SOURCE_DIR}"
-	
-	# sourced from environment:  checks $? -- aborts script execution if non-zero
-	assert_zero $?
-
-	mkdir -p build
-	pushd build
 	assert_zero $?
 	
-	logprint "Configuring binutils pass1..."
-	../configure \
-		--prefix=${CROSSTOOLS_DIR} \
-		--with-sysroot=${T_SYSROOT} \
-		--target=${T_TRIPLET} \
-		--disable-nls \
-		--disable-werror
+	logprint "Configuring ${APPNAME}..."
+	./configure \
+		--prefix=/usr \
+		--host=${T_TRIPLET} \
+		--build=$(./config.guess)
 	assert_zero $?
 	
 	logprint "Compiling..."
 	make
 	assert_zero $?
-
+	
 	logprint "Build operation complete."
 }
 
-mode_build_pass2() {
-	logprint "Starting build of ${APPNAME}..."
-	
-	logprint "Entering build dir."	
+mode_install_temp() {
+	logprint "Starting install of ${APPNAME}..."
 	pushd "${T_SOURCE_DIR}"
-	
-	# sourced from environment:  checks $? -- aborts script execution if non-zero
-	assert_zero $?
-
-	logprint "Entering build subdir"
-	mkdir -p build
-	pushd build
 	assert_zero $?
 	
-	# might be wrong, check if --enable-64-bit-bfd is needed on 64-bit targets
-	logprint "Configuring binutils pass2..."
-	../configure \
-		--prefix=/usr \
-		--build=$(../config.guess) \
-		--host=${T_TRIPLET} \
-		--disable-nls \
-		--enable-shared \
-		--disable-werror \
-		--enable-64-bit-bfd
-	assert_zero $?
-	
-	logprint "Compiling..."
-	make -j1
-	assert_zero $?
-
-	logprint "Build operation complete."
-}
-
-mode_install_pass1() {
-	logprint "Starting install of ${APPNAME}..."
-	pushd "${T_SOURCE_DIR}/build"
-	assert_zero $?
-	
-	make install
+	logprint "Installing..."
+	make DESTDIR=${T_SYSROOT} install
 	assert_zero $?
 	
 	logprint "Install operation complete."
 }
 
-mode_install_pass2() {
-	logprint "Starting install of ${APPNAME}..."
-	pushd "${T_SOURCE_DIR}/build"
-	assert_zero $?
-	
-	make -j1 DESTDIR=${T_SYSROOT} install
-	assert_zero $?
-	
-	logprint "Clean up items..."
-	logprint "Applying hotfix for libctf.so / host zlib bug"
-	install -vm755 libctf/.libs/libctf.so.0.0.0 ${T_SYSROOT}/usr/lib
-	assert_zero $?
-	
-	logprint "Install operation complete."
-}
 
 mode_help() {
-	echo "${APPNAME} [ --stage ] [ --build_pass1 ] [ --install_pass1 ] [ --pass1 ] [ --build_pass2 ] [ --install_pass2 ] [ --pass2 ][ --help ]"
+	echo "${APPNAME} [ --stage ] [ --build_temp ] [ --install_temp ] [ --all_temp ] [ --help ]"
 	exit 0
 }
 
-# MODE_PASS1 is a meta toggle for all pass1 modes.  Modes will always 
-# run in the correct order.
-if [ "$MODE_PASS1" = "true" ]; then
+if [ "$MODE_ALL_TEMP" = "true" ]; then
 	MODE_STAGE=true
-	MODE_BUILD_PASS1=true
-	MODE_INSTALL_PASS1=true
-fi
-
-if [ "$MODE_PASS2" = "true" ]; then
-	MODE_STAGE=true
-	MODE_BUILD_PASS2=true
-	MODE_INSTALL_PASS2=true
+	MODE_BUILD_TEMP=true
+	MODE_INSTALL_TEMP=true
 fi
 
 # if no options were selected, then show help and exit
 if \
 	[ "$MODE_HELP" != "true" ] && \
 	[ "$MODE_STAGE" != "true" ] && \
-	[ "$MODE_BUILD_PASS1" != "true" ] && \
-	[ "$MODE_INSTALL_PASS1" != "true" ] && \
-	[ "$MODE_BUILD_PASS2" != "true" ] && \
-	[ "$MODE_INSTALL_PASS2" != "true" ]
+	[ "$MODE_BUILD_TEMP" != "true" ] && \
+	[ "$MODE_INSTALL_TEMP" != "true" ]
 then
 	logprint "No option selected during execution."
 	mode_help
@@ -276,27 +194,15 @@ if [ "$MODE_STAGE" = "true" ]; then
 	assert_zero $?
 fi
 
-if [ "$MODE_BUILD_PASS1" = "true" ]; then
-	logprint "Build of PASS1 selected."
-	mode_build_pass1
+if [ "$MODE_BUILD_TEMP" = "true" ]; then
+	logprint "Build of ${APPNAME} selected."
+	mode_build_temp
 	assert_zero $?
 fi
 
-if [ "$MODE_INSTALL_PASS1" = "true" ]; then
-	logprint "Install of PASS1 selected."
-	mode_install_pass1
-	assert_zero $?
-fi
-
-if [ "$MODE_BUILD_PASS2" = "true" ]; then
-	logprint "Build of PASS2 selected."
-	mode_build_pass2
-	assert_zero $?
-fi
-
-if [ "$MODE_INSTALL_PASS2" = "true" ]; then
-	logprint "Install of PASS2 selected."
-	mode_install_pass2
+if [ "$MODE_INSTALL_TEMP" = "true" ]; then
+	logprint "Install of ${APPNAME} selected."
+	mode_install_temp
 	assert_zero $?
 fi
 

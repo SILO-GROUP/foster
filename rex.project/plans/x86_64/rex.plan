@@ -7,12 +7,12 @@
 			"comment": "create directories and users necessary to build"
 		},
 		{
-			"name":"stage, compile, install binutils", 
+			"name":"stage, compile, install binutils pass1", 
 			"dependencies": [ null ],
 			"comment": "5.2"
 		},
 		{
-			"name":"stage, compile, install gcc", 
+			"name":"stage, compile, install gcc pass1", 
 			"dependencies": [ null ],
 			"comment": "5.3"
 		},
@@ -45,7 +45,82 @@
 			"name":"stage, build, install bash", 
 			"dependencies": [ null ],
 			"comment": "6.4"
-		}		
+		},
+		{
+			"name":"stage, build, install coreutils", 
+			"dependencies": [ null ],
+			"comment": "6.5"
+		},	
+		{
+			"name":"stage, build, install diffutils", 
+			"dependencies": [ null ],
+			"comment": "6.6"
+		},
+		{
+			"name":"stage, build, install file", 
+			"dependencies": [ null ],
+			"comment": "6.7"
+		},		
+		{
+			"name":"stage, build, install findutils", 
+			"dependencies": [ null ],
+			"comment": "6.8"
+		},
+		{
+			"name":"stage, build, install gawk", 
+			"dependencies": [ null ],
+			"comment": "6.9"
+		},
+		{
+			"name":"stage, build, install grep", 
+			"dependencies": [ null ],
+			"comment": "6.10"
+		},
+		{
+			"name":"stage, build, install gzip", 
+			"dependencies": [ null ],
+			"comment": "6.11"
+		},
+		{
+			"name":"stage, build, install make", 
+			"dependencies": [ null ],
+			"comment": "6.12"
+		},
+		{
+			"name":"stage, build, install patch", 
+			"dependencies": [ null ],
+			"comment": "6.13"
+		},
+		{
+			"name":"stage, build, install sed", 
+			"dependencies": [ null ],
+			"comment": "6.14"
+		},
+		{
+			"name":"stage, build, install tar", 
+			"dependencies": [ null ],
+			"comment": "6.15"
+		},
+		{
+			"name":"stage, build, install xz", 
+			"dependencies": [ null ],
+			"comment": "6.16"
+		},
+		{
+			"name":"stage, build, install binutils pass2", 
+			"dependencies": [ null ],
+			"comment": "6.17"
+		},
+		{
+			"name":"stage, build, install gcc pass2", 
+			"dependencies": [ null ],
+			"comment": "6.18"
+		},
+		{
+			"name":"fix sysroot ownership", 
+			"dependencies": [ null ],
+			"comment": "7.2 Preparing the Chroot"
+		}
 	]
 }
 

@@ -34,9 +34,12 @@ ARGUMENT_LIST=(
     "stage"
     "build_pass1"
     "install_pass1"
+    "build_pass2"
+    "install_pass2"
     "build_libstdcxx"
     "install_libstdcxx"
     "pass1"
+    "pass2"
     "libstdcxx"
     "help"
 )
@@ -46,10 +49,13 @@ ARGUMENT_LIST=(
 MODE_STAGE=false
 MODE_BUILD_PASS1=false
 MODE_INSTALL_PASS1=false
+MODE_BUILD_PASS2=false
+MODE_INSTALL_PASS2=false
 MODE_BUILD_LIBSTDCXX=false
 MODE_INSTALL_LIBSTDCXX=false
 MODE_LIBSTDCXX=false
 MODE_PASS1=false
+MODE_PASS2=false
 MODE_HELP=false
 
 # the file to log to
@@ -90,6 +96,14 @@ while [[ $# -gt 0 ]]; do
             MODE_INSTALL_PASS1=true
             shift 1
             ;;
+        --build_pass2)
+            MODE_BUILD_PASS2=true
+            shift 1
+            ;;
+        --install_pass2)
+            MODE_INSTALL_PASS2=true
+            shift 1
+            ;;
         --build_libstdcxx)
             MODE_BUILD_LIBSTDCXX=true
             shift 1
@@ -99,6 +113,10 @@ while [[ $# -gt 0 ]]; do
             shift 1
             ;;
         --pass1)
+            MODE_PASS1=true
+            shift 1
+            ;;
+        --pass2)
             MODE_PASS1=true
             shift 1
             ;;
@@ -228,7 +246,7 @@ mode_build_pass1() {
 	
 	# patches
 	logprint "Applying patches..."
-	patch -p0 < "${PATCHES_DIR}/gcc_pass1_libarchpath_fhs.patch"
+	patch -p0 < "${PATCHES_DIR}/gcc_libarchpath_fhs.patch"
 	assert_zero $?
 	
 	
@@ -266,6 +284,75 @@ mode_build_pass1() {
 	logprint "Build operation complete."
 }
 
+mode_build_pass2() {
+	logprint "Starting build of ${APPNAME}..."
+	
+	logprint "Entering build dir."	
+	pushd "${T_SOURCE_DIR}"
+	assert_zero $?
+	
+	# patches
+	logprint "Applying patches..."
+	patch -p0 < "${PATCHES_DIR}/gcc_libarchpath_fhs.patch"
+	assert_zero $?
+	
+	logprint "Entering build subdirectory"
+	mkdir -p build
+	pushd build
+	assert_zero $?
+	
+	logprint "Creating posix thread support compatibility symlink..."
+	mkdir -pv ${T_TRIPLET}/libgcc
+	assert_zero $?
+	
+	ln -s ../../../libgcc/gthr-posix.h ${T_TRIPLET}/libgcc/gthr-default.h
+	assert_zero $?
+	
+	logprint "Configuring ${APPNAME}..."
+	../configure \
+		--build=$(../config.guess) \
+		--host=${T_TRIPLET} \
+		--prefix=/usr \
+		CC_FOR_TARGET=${T_TRIPLET}-gcc \
+		--with-build-sysroot=${T_SYSROOT} \
+		--enable-initfini-array \
+		--disable-nls \
+		--disable-multilib \
+		--disable-decimal-float \
+		--disable-libatomic \
+		--disable-libgomp \
+		--disable-libquadmath \
+		--disable-libssp \
+		--disable-libvtv \
+		--disable-libstdcxx \
+		--enable-languages=c,c++
+	assert_zero $?
+	
+	logprint "Compiling..."
+	make
+	assert_zero $?
+
+	logprint "Build operation complete."
+}
+
+mode_install_pass2() {
+	logprint "Starting install of ${APPNAME}..."
+	pushd "${T_SOURCE_DIR}/build"
+	assert_zero $?
+	
+	make DESTDIR=${T_SYSROOT} install
+	assert_zero $?
+	
+	
+	logprint "Clean up items..."
+	logprint "CC/GCC utility symlink"
+	ln -sv gcc ${T_SYSROOT}/usr/bin/cc
+	assert_zero $?
+
+	logprint "Install operation complete."
+	
+}
+
 mode_install_pass1() {
 	logprint "Starting install of ${APPNAME}..."
 	pushd "${T_SOURCE_DIR}/build"
@@ -299,6 +386,12 @@ if [ "$MODE_PASS1" = "true" ]; then
 	MODE_INSTALL_PASS1=true
 fi
 
+if [ "$MODE_PASS2" = "true" ]; then
+	MODE_STAGE=true
+	MODE_BUILD_PASS2=true
+	MODE_INSTALL_PASS2=true
+fi
+
 if [ "$MODE_LIBSTDCXX" = "true" ]; then
 	MODE_BUILD_LIBSTDCXX=true
 	MODE_INSTALL_LIBSTDCXX=true
@@ -310,6 +403,8 @@ if \
 	[ "$MODE_STAGE" != "true" ] && \
 	[ "$MODE_BUILD_PASS1" != "true" ] && \
 	[ "$MODE_INSTALL_PASS1" != "true" ] && \
+	[ "$MODE_BUILD_PASS2" != "true" ] && \
+	[ "$MODE_INSTALL_PASS2" != "true" ] && \
 	[ "$MODE_BUILD_LIBSTDCXX" != "true" ] && \
 	[ "$MODE_INSTALL_LIBSTDCXX" != "true" ] && \
 	[ "$MODE_LIBSTDCXX" != "true" ]
@@ -339,6 +434,18 @@ fi
 if [ "$MODE_INSTALL_PASS1" = "true" ]; then
 	logprint "Install of PASS1 selected."
 	mode_install_pass1
+	assert_zero $?
+fi
+
+if [ "$MODE_BUILD_PASS2" = "true" ]; then
+	logprint "Build of PASS2 selected."
+	mode_build_pass2
+	assert_zero $?
+fi
+
+if [ "$MODE_INSTALL_PASS2" = "true" ]; then
+	logprint "Install of PASS2 selected."
+	mode_install_pass2
 	assert_zero $?
 fi
 
