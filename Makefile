@@ -40,4 +40,4 @@ verify_patches:
 	@${workspace}/makefile.controls/verify_patches.sh
 
 enter_chroot:
-	@${workspace}/makefile.controls/enter_chroot.sh
+	@sudo ${workspace}/makefile.controls/enter_chroot.sh ${workspace}
