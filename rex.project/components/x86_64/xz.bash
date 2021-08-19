@@ -139,7 +139,7 @@ mode_build_temp() {
 		--host=${T_TRIPLET} \
 		--build=$(build-aux/config.guess) \
 		--disable-static \
-		--docdir=/sur/share/doc/xz-5.2.5
+		--docdir=/usr/share/doc/xz-5.2.5
 	assert_zero $?
 	
 	logprint "Compiling..."

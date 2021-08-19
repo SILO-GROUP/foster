@@ -311,6 +311,32 @@
 			"group":		"root",
 			"shell":		"/bin/bash",
 			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"prepare virtual kernel filesystems",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/prepare_vkfs.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
+		},
+		{
+			"name":			"enter chroot",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/enter_chroot.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/initial_environment.bash"
 		}
 	]
 }

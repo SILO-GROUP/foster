@@ -120,6 +120,16 @@
 			"name":"fix sysroot ownership", 
 			"dependencies": [ null ],
 			"comment": "7.2 Preparing the Chroot"
+		},
+		{
+			"name":"prepare virtual kernel filesystems", 
+			"dependencies": [ null ],
+			"comment": "7.3"
+		},
+		{
+			"name":"enter chroot", 
+			"dependencies": [ null ],
+			"comment": "7.4 Enter the Chroot"
 		}
 	]
 }

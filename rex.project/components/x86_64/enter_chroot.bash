@@ -4,10 +4,13 @@
 # the path where logs are written to
 # note: LOGS_ROOT is sourced from environment
 
-APPNAME="CHROOT VFS SETUP"
+APPNAME="ENTER_CHROOT"
 
 # ISO 8601 variation
 TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
+
+# the file to log to
+LOGFILE="${APPNAME}.log"
 
 LOG_DIR="${LOGS_ROOT}/${APPNAME}-${TIMESTAMP}"
 

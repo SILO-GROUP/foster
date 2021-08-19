@@ -8,6 +8,9 @@
 # Automatically export stuff so we don't have to do it explicitly
 set -a
 set +h
+
+TERM=xterm-256color
+
 umask 022
 LC_ALL=POSIX
 
@@ -32,7 +35,9 @@ LOGS_ROOT=${PROJECT_ROOT}/logs/scripts
 
 CROSSTOOLS_DIR=${T_SYSROOT}/crosstools
 TEMP_STAGE_DIR=${T_SYSROOT}/source_stage
+# only the linker symlinks end up here??
 ARCHLIB_DIR=${T_SYSROOT}/lib64
+#ARCHLIB_DIR=${T_SYSROOT}/lib
 
 T_VENDOR="rhl"
 T_ARCH=$(uname -m)
@@ -43,7 +48,7 @@ BUILD_GROUP="royalty"
 
 PATH=/usr/bin
 if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
-PATH=${CROSSTOOLS_DIR}/bin:$PATH
+PATH=${CROSSTOOLS_DIR}/bin:$PATH:/usr/sbin
 
 # Compatibility
 LFS=${T_SYSROOT}

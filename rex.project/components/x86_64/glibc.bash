@@ -131,12 +131,18 @@ mode_build_pass1() {
 	# - your host distro
 	
 	logprint "Setting up compatibility and LSB symlinks..."
-	ln -sfv /usr/lib64/ld-linux-${T_ARCH}-linux-gnu.so.2 ${ARCHLIB_DIR}
+	logprint "Entering TEMP_STAGE_DIR"
+	pushd ${TEMP_STAGE_DIR}
 	assert_zero $?
 	
-	ln -sfv /usr/lib64/ld-linux-${T_ARCH}-linux-gnu.so.2 ${ARCHLIB_DIR}/ld-lsb-x86-64.so.3
+	# fuck this part in particular!
+	ln -sfv ../lib/ld-linux-x86-64.so.2 ${T_SYSROOT}/lib64
 	assert_zero $?
-
+	
+	ln -sfv ../lib/ld-linux-x86-64.so.2 ${T_SYSROOT}/lib64/ld-lsb-x86-64.so.3
+	assert_zero $?
+	popd
+	
 	# patch, configure and build
 	logprint "Starting build of ${APPNAME}..."
 	

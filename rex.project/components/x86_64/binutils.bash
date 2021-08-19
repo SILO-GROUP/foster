@@ -210,7 +210,7 @@ mode_install_pass1() {
 	pushd "${T_SOURCE_DIR}/build"
 	assert_zero $?
 	
-	make install
+	make -j1 install
 	assert_zero $?
 	
 	logprint "Install operation complete."

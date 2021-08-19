@@ -11,6 +11,9 @@ TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
 
 LOG_DIR="${LOGS_ROOT}/${APPNAME}-${TIMESTAMP}"
 
+# the file to log to
+LOGFILE="${APPNAME}.log"
+
 logprint() {
 	mkdir -p "${LOG_DIR}"
 	echo "[$(date +%Y-%m-%d_%H:%M:%S)] [${APPNAME}] $1" \

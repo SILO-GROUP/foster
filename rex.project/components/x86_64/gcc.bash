@@ -258,7 +258,7 @@ mode_build_pass1() {
 	../configure \
 		--target=${T_TRIPLET} \
 		--prefix=${CROSSTOOLS_DIR} \
-		--with-glibc-version=2.31 \
+		--with-glibc-version=2.11 \
 		--with-sysroot=${T_SYSROOT} \
 		--with-newlib \
 		--without-headers \
@@ -285,7 +285,7 @@ mode_build_pass1() {
 }
 
 mode_build_pass2() {
-	logprint "Starting build of ${APPNAME}..."
+	logprint "Starting build of ${APPNAME}/pass2..."
 	
 	logprint "Entering build dir."	
 	pushd "${T_SOURCE_DIR}"
@@ -336,11 +336,11 @@ mode_build_pass2() {
 }
 
 mode_install_pass2() {
-	logprint "Starting install of ${APPNAME}..."
+	logprint "Starting install of ${APPNAME}/pass2..."
 	pushd "${T_SOURCE_DIR}/build"
 	assert_zero $?
 	
-	make DESTDIR=${T_SYSROOT} install
+	make -j1 DESTDIR=${T_SYSROOT} install
 	assert_zero $?
 	
 	
@@ -354,11 +354,11 @@ mode_install_pass2() {
 }
 
 mode_install_pass1() {
-	logprint "Starting install of ${APPNAME}..."
+	logprint "Starting install of ${APPNAME}/pass1..."
 	pushd "${T_SOURCE_DIR}/build"
 	assert_zero $?
 	
-	make install
+	make -j1 install
 	assert_zero $?
 	
 	logprint "Install operation complete."
