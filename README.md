@@ -14,7 +14,7 @@ Assumes you cloned the project to `/opt/foster`
 # makefile Driven
 this project is makefile driven
 
-## make build
+## make build_chroot
 kick off the rex project
 
 ## make clean
@@ -34,3 +34,6 @@ verify the sources' checksums for file integrity verification
 
 ## make verify_patches
 verify the patches' file integrity
+
+## make enter_chroot
+This will allow you to enter the chroot you created with the `make build_chroot` command.

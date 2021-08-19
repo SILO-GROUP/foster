@@ -326,10 +326,10 @@
 			"environment":	"environments/x86_64/initial_environment.bash"
 		},
 		{
-			"name":			"enter chroot",
+			"name":			"notify of succesful completion",
 			"active":		true,
 			"required":		true,
-			"target":		"components/x86_64/enter_chroot.bash",
+			"target":		"components/x86_64/notify_success.bash",
 			"rectify":		false,
 			"rectifier":	"",
 			"log":			true,

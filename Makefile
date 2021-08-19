@@ -7,9 +7,11 @@ mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 workspace := $(abspath $(current_dir)/../../foster)
 
-# user may want to use /opt/foster/init.sh
 build:
-	@sudo ${workspace}/init.sh
+	@sudo ${workspace}/build_chroot.sh
+
+build_chroot:
+	@sudo ${workspace}/build_chroot.sh
 
 # clean up artifacts between builds if desired
 # includes logs
@@ -37,3 +39,5 @@ verify_sources:
 verify_patches:
 	@${workspace}/makefile.controls/verify_patches.sh
 
+enter_chroot:
+	@${workspace}/makefile.controls/enter_chroot.sh

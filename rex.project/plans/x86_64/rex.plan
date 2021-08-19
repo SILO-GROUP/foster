@@ -127,7 +127,7 @@
 			"comment": "7.3"
 		},
 		{
-			"name":"enter chroot", 
+			"name":"notify of successful completion", 
 			"dependencies": [ null ],
 			"comment": "7.4 Enter the Chroot"
 		}
