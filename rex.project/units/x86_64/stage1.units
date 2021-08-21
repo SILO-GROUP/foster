@@ -11,7 +11,7 @@
 			"user":			"root",
 			"group":		"root",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, compile, install binutils pass1",
@@ -24,20 +24,20 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, compile, install gcc pass1",
 			"active":		true,
 			"required":		true,
-			"target":		"components/x86_64/gcc.bash --pass1",
+			"target":		"components/x86_64/gcc.bash --gcc_pass1",
 			"rectify":		false,
 			"rectifier":	"",
 			"log":			true,
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install linux api headers",
@@ -50,7 +50,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install glibc",
@@ -63,20 +63,20 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
-			"name":			"build, install libstdcxx",
+			"name":			"build, install libstdcxx/pass1",
 			"active":		true,
 			"required":		true,
-			"target":		"components/x86_64/gcc.bash --libstdcxx",
+			"target":		"components/x86_64/gcc.bash --libstdcxx_pass1",
 			"rectify":		false,
 			"rectifier":	"",
 			"log":			true,
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install m4",
@@ -89,7 +89,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install ncurses",
@@ -102,7 +102,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install bash",
@@ -115,7 +115,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install coreutils",
@@ -128,7 +128,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install diffutils",
@@ -141,7 +141,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install file",
@@ -154,7 +154,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install findutils",
@@ -167,7 +167,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install gawk",
@@ -180,7 +180,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install grep",
@@ -193,7 +193,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install gzip",
@@ -206,7 +206,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install make",
@@ -219,7 +219,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install patch",
@@ -232,7 +232,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install sed",
@@ -245,7 +245,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install tar",
@@ -258,7 +258,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install xz",
@@ -271,7 +271,7 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install binutils pass2",
@@ -284,20 +284,20 @@
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"stage, build, install gcc pass2",
 			"active":		true,
 			"required":		true,
-			"target":		"components/x86_64/gcc.bash --pass2",
+			"target":		"components/x86_64/gcc.bash --gcc_pass2",
 			"rectify":		false,
 			"rectifier":	"",
 			"log":			true,
 			"user":			"phanes",
 			"group":		"royalty",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"fix sysroot ownership",
@@ -310,7 +310,7 @@
 			"user":			"root",
 			"group":		"root",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
 			"name":			"prepare virtual kernel filesystems",
@@ -323,10 +323,10 @@
 			"user":			"root",
 			"group":		"root",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
-			"name":			"notify of succesful completion",
+			"name":			"notify of successful completion",
 			"active":		true,
 			"required":		true,
 			"target":		"components/x86_64/notify_success.bash",
@@ -336,7 +336,46 @@
 			"user":			"root",
 			"group":		"root",
 			"shell":		"/bin/bash",
-			"environment":	"environments/x86_64/initial_environment.bash"
+			"environment":	"environments/x86_64/stage1.env.bash"
+		},
+		{
+			"name":			"create extended sysoot directories",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/create_extended_directories.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage1.env.bash"
+		},
+		{
+			"name":			"create etc files",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/create_etc_files.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage1.env.bash"
+		},
+		{
+			"name":			"create log files",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/create_log_files.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage1.env.bash"
 		}
 	]
 }

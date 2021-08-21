@@ -11,7 +11,7 @@ ulimit -c unlimited
 # Executes rex from within the shell.
 /usr/local/bin/rex \
 	-c /opt/foster/rex.project/plans/x86_64/rex.config \
-	-p /opt/foster/rex.project/plans/x86_64/rex.plan
+	-p /opt/foster/rex.project/plans/x86_64/stage1.plan
 
 retVal=$?
 

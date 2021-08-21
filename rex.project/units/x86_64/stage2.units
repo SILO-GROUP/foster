@@ -1,0 +1,17 @@
+{
+	"units": [
+		{
+			"name":			"confirm chroot context",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/confirm_chroot_context.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		}
+	]
+}

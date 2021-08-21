@@ -4,13 +4,10 @@
 # the path where logs are written to
 # note: LOGS_ROOT is sourced from environment
 
-APPNAME="ENTER_CHROOT"
+APPNAME="CREATE ETC FILES"
 
 # ISO 8601 variation
 TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
-
-# the file to log to
-LOGFILE="${APPNAME}.log"
 
 LOG_DIR="${LOGS_ROOT}/${APPNAME}-${TIMESTAMP}"
 
@@ -20,12 +17,17 @@ logprint() {
 	| tee -a "${LOG_DIR}/${LOGFILE}"
 }
 
-logprint "Chrooting into your new sysroot..."
-chroot "${T_SYSROOT}" /usr/bin/env -i \
-	HOME=/root \
-	TERM="${TERM}" \
-	PS1='\n[ \u @ \H (CHROOT) ] << \w >> \n\n[- ' \
-	PATH=/bin:/usr/bin:/sbin:/usr/sbin \
-	/bin/bash --login +h
+logprint "Creating log files..."
 
-logprint "Thanks for hanging in there!"
+touch ${T_SYSROOT}/var/log/{btmp,lastlog,faillog,wtmp}
+assert_zero $?
+
+chgrp -v +13 ${T_SYSROOT}/var/log/lastlog
+assert_zero $?
+
+chmod -v 664 ${T_SYSROOT}/var/log/lastlog
+assert_zero $?
+
+chmod -v 600 ${T_SYSROOT}/var/log/btmp
+assert_zero $?
+

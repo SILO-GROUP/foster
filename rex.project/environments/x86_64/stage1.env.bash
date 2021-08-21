@@ -26,7 +26,7 @@ assert_zero() {
 }
 
 PROJECT_ROOT=/opt/foster
-
+CONFIG_DIR=${PROJECT_ROOT}/staging/configs
 SOURCES_DIR=${PROJECT_ROOT}/staging/sources
 PATCHES_DIR=${PROJECT_ROOT}/staging/patches
 
@@ -35,9 +35,8 @@ LOGS_ROOT=${PROJECT_ROOT}/logs/scripts
 
 CROSSTOOLS_DIR=${T_SYSROOT}/crosstools
 TEMP_STAGE_DIR=${T_SYSROOT}/source_stage
-# only the linker symlinks end up here??
+
 ARCHLIB_DIR=${T_SYSROOT}/lib64
-#ARCHLIB_DIR=${T_SYSROOT}/lib
 
 T_VENDOR="rhl"
 T_ARCH=$(uname -m)
@@ -50,9 +49,6 @@ PATH=/usr/bin
 if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
 PATH=${CROSSTOOLS_DIR}/bin:$PATH:/usr/sbin
 
-# Compatibility
-LFS=${T_SYSROOT}
-LFS_TGT=${T_TRIPLET}
 CONFIG_SITE=${T_SYSROOT}/usr/share/config.site
 
 MAKEFLAGS="-j$(nproc)"

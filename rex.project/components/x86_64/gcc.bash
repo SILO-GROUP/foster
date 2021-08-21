@@ -32,30 +32,41 @@ VERSION="10.2.0"
 # register mode selections
 ARGUMENT_LIST=(
     "stage"
-    "build_pass1"
-    "install_pass1"
-    "build_pass2"
-    "install_pass2"
-    "build_libstdcxx"
-    "install_libstdcxx"
-    "pass1"
-    "pass2"
-    "libstdcxx"
+    "build_gcc_pass1"
+    "install_gcc_pass1"
+    "build_gcc_pass2"
+    "install_gcc_pass2"
+    "build_libstdcxx_pass1"
+    "install_libstdcxx_pass1"
+    "build_libstdcxx_pass2"
+    "install_libstdcxx_pass2"
+    "gcc_pass1"
+    "gcc_pass2"
+    "libstdcxx_pass1"
+    "libstdcxx_pass2"
     "help"
 )
+
+mode_help() {
+	echo "${APPNAME} [ --stage ] [ --build_gcc_pass1 ] [ --install_gcc_pass1 ] [ --build_gcc_pass2 ] [ --install_gcc_pass2 ] [ --build_libstdcxx_pass1 ] [ --install_libstdcxx_pass1 ] [ --build_libstdcxx_pass2 ] [ --install_libstdcxx_pass2 ] [ --gcc_pass1 ] [ --gcc_pass2 ] [ --libstdcxx_pass1 ] [ --libstdcxx_pass1 ] [ --help ]"
+	exit 0
+}
 
 # modes to associate with switches
 # assumes you want nothing done unless you ask for it.
 MODE_STAGE=false
-MODE_BUILD_PASS1=false
-MODE_INSTALL_PASS1=false
-MODE_BUILD_PASS2=false
-MODE_INSTALL_PASS2=false
-MODE_BUILD_LIBSTDCXX=false
-MODE_INSTALL_LIBSTDCXX=false
-MODE_LIBSTDCXX=false
-MODE_PASS1=false
-MODE_PASS2=false
+MODE_BUILD_GCC_PASS1=false
+MODE_INSTALL_GCC_PASS1=false
+MODE_BUILD_GCC_PASS2=false
+MODE_INSTALL_GCC_PASS2=false
+MODE_BUILD_LIBSTDCXX_PASS1=false
+MODE_INSTALL_LIBSTDCXX_PASS1=false
+MODE_BUILD_LIBSTDCXX_PASS2=false
+MODE_INSTALL_LIBSTDCXX_PASS2=false
+MODE_LIBSTDCXX_PASS1=false
+MODE_LIBSTDCXX_PASS2=false
+MODE_GCC_PASS1=false
+MODE_GCC_PASS2=false
 MODE_HELP=false
 
 # the file to log to
@@ -88,40 +99,52 @@ while [[ $# -gt 0 ]]; do
             MODE_STAGE=true
             shift 1
             ;;
-        --build_pass1)
-            MODE_BUILD_PASS1=true
+        --build_gcc_pass1)
+            MODE_BUILD_GCC_PASS1=true
             shift 1
             ;;
-        --install_pass1)
-            MODE_INSTALL_PASS1=true
+        --install_gcc_pass1)
+            MODE_INSTALL_GCC_PASS1=true
             shift 1
             ;;
-        --build_pass2)
-            MODE_BUILD_PASS2=true
+        --build_gcc_pass2)
+            MODE_BUILD_GCC_PASS2=true
             shift 1
             ;;
-        --install_pass2)
-            MODE_INSTALL_PASS2=true
+        --install_gcc_pass2)
+            MODE_INSTALL_GCC_PASS2=true
             shift 1
             ;;
-        --build_libstdcxx)
-            MODE_BUILD_LIBSTDCXX=true
+        --build_libstdcxx_pass1)
+            MODE_BUILD_LIBSTDCXX_PASS1=true
             shift 1
             ;;
-        --install_libstdcxx)
-            MODE_INSTALL_LIBSTDCXX=true
+        --install_libstdcxx_pass1)
+            MODE_INSTALL_LIBSTDCXX_PASS1=true
             shift 1
             ;;
-        --pass1)
-            MODE_PASS1=true
+        --build_libstdcxx_pass2)
+            MODE_BUILD_LIBSTDCXX_PASS2=true
             shift 1
             ;;
-        --pass2)
-            MODE_PASS1=true
+        --install_libstdcxx_pass2)
+            MODE_INSTALL_LIBSTDCXX_PASS2=true
             shift 1
             ;;
-        --libstdcxx)
-            MODE_LIBSTDCXX=true
+        --gcc_pass1)
+            MODE_GCC_PASS1=true
+            shift 1
+            ;;
+        --gcc_pass2)
+            MODE_GCC_PASS2=true
+            shift 1
+            ;;
+        --libstdcxx_pass1)
+            MODE_LIBSTDCXX_PASS1=true
+            shift 1
+            ;;
+        --libstdcxx_pass2)
+            MODE_LIBSTDCXX_PASS2=true
             shift 1
             ;;
         --help)
@@ -193,8 +216,8 @@ mode_stage() {
 	logprint "Staging operation complete."
 }
 
-mode_build_libstdcxx() {
-	logprint "Starting build of LIBSTDC++..."
+mode_build_libstdcxx_pass1() {
+	logprint "Starting build of LIBSTDC++/pass1..."
 	
 	logprint "Entering build dir."	
 	pushd "${T_SOURCE_DIR}"
@@ -224,8 +247,41 @@ mode_build_libstdcxx() {
 	logprint "Build operation complete."
 }
 
-mode_install_libstdcxx() {
-	logprint "Starting install of LIBSTDC++..."
+mode_build_libstdcxx_pass2() {
+	logprint "Starting build of LIBSTDC++/pass2..."
+	
+	logprint "Entering build dir."	
+	pushd "${T_SOURCE_DIR}"
+	assert_zero $?
+	
+	ln -s gthr-posix.h
+	
+	mkdir -p build
+	pushd build
+	assert_zero $?
+	
+	logprint "Configuring libstdc++..."
+	# Note: This currently depends on crosstools being in the top level dir of the T_SYSROOT
+	# use a substring in the future
+	../libstdc++-v3/configure \
+		--host=${T_TRIPLET} \
+		--build=$(../config.guess) \
+		--prefix=/usr \
+		--disable-multilib \
+		--disable-nls \
+		--disable-libstdcxx-pch \
+		--with-gxx-include-dir=/$(basename ${CROSSTOOLS_DIR})/${T_TRIPLET}/include/c++/10.2.0
+	assert_zero $?
+	
+	logprint "Compiling..."
+	make
+	assert_zero $?
+
+	logprint "Build operation complete."
+}
+
+mode_install_libstdcxx_pass1() {
+	logprint "Starting install of LIBSTDC++/pass1..."
 	
 	pushd "${T_SOURCE_DIR}/build"
 	assert_zero $?
@@ -237,8 +293,8 @@ mode_install_libstdcxx() {
 }
 
 # when the build_pass1 mode is enabled, this will execute
-mode_build_pass1() {
-	logprint "Starting build of ${APPNAME}..."
+mode_build_gcc_pass1() {
+	logprint "Starting build of ${APPNAME}/pass1..."
 	
 	logprint "Entering build dir."	
 	pushd "${T_SOURCE_DIR}"
@@ -284,7 +340,7 @@ mode_build_pass1() {
 	logprint "Build operation complete."
 }
 
-mode_build_pass2() {
+mode_build_gcc_pass2() {
 	logprint "Starting build of ${APPNAME}/pass2..."
 	
 	logprint "Entering build dir."	
@@ -335,7 +391,7 @@ mode_build_pass2() {
 	logprint "Build operation complete."
 }
 
-mode_install_pass2() {
+mode_install_gcc_pass2() {
 	logprint "Starting install of ${APPNAME}/pass2..."
 	pushd "${T_SOURCE_DIR}/build"
 	assert_zero $?
@@ -353,7 +409,7 @@ mode_install_pass2() {
 	
 }
 
-mode_install_pass1() {
+mode_install_gcc_pass1() {
 	logprint "Starting install of ${APPNAME}/pass1..."
 	pushd "${T_SOURCE_DIR}/build"
 	assert_zero $?
@@ -371,43 +427,50 @@ mode_install_pass1() {
 	cat gcc/limitx.h gcc/glimits.h gcc/limity.h > `dirname $(${T_TRIPLET}-gcc -print-libgcc-file-name)`/install-tools/include/limits.h
 	assert_zero $?
 }
-
-
-mode_help() {
-	echo "${APPNAME} [ --stage ] [ --build_pass1 ] [ --install_pass1 ] [ --pass1 ] [ --help ]"
-	exit 0
-}
-
-# MODE_PASS1 is a meta toggle for all pass1 modes.  Modes will always 
+# MODE_GCC_PASS1 is a meta toggle for all pass1 modes.  Modes will always 
 # run in the correct order.
-if [ "$MODE_PASS1" = "true" ]; then
+if [ "$MODE_GCC_PASS1" = "true" ]; then
+	echo "PASS1 selected"
+	logprint "PASS1 selected."
 	MODE_STAGE=true
-	MODE_BUILD_PASS1=true
-	MODE_INSTALL_PASS1=true
+	MODE_BUILD_GCC_PASS1=true
+	MODE_INSTALL_GCC_PASS1=true
 fi
 
-if [ "$MODE_PASS2" = "true" ]; then
+if [ "$MODE_GCC_PASS2" = "true" ]; then
+	logprint "PASS2 selected."
 	MODE_STAGE=true
-	MODE_BUILD_PASS2=true
-	MODE_INSTALL_PASS2=true
+	MODE_BUILD_GCC_PASS2=true
+	MODE_INSTALL_GCC_PASS2=true
 fi
 
-if [ "$MODE_LIBSTDCXX" = "true" ]; then
-	MODE_BUILD_LIBSTDCXX=true
-	MODE_INSTALL_LIBSTDCXX=true
+if [ "$MODE_LIBSTDCXX_PASS1" = "true" ]; then
+	logprint "LIBSTDCXX PASS1 selected."
+	MODE_BUILD_LIBSTDCXX_PASS1=true
+	MODE_INSTALL_LIBSTDCXX_PASS1=true
 fi
+
+if [ "$MODE_LIBSTDCXX_PASS2" = "true" ]; then
+	logprint "LIBSTDCXX PASS2 selected."
+	MODE_STAGE=true
+	MODE_BUILD_LIBSTDCXX_PASS2=true
+	MODE_INSTALL_LIBSTDCXX_PASS2=true
+fi
+
+echo $MODE_BUILD_GCC_PASS1
 
 # if no options were selected, then show help and exit
 if \
 	[ "$MODE_HELP" != "true" ] && \
 	[ "$MODE_STAGE" != "true" ] && \
-	[ "$MODE_BUILD_PASS1" != "true" ] && \
-	[ "$MODE_INSTALL_PASS1" != "true" ] && \
-	[ "$MODE_BUILD_PASS2" != "true" ] && \
+	[ "$MODE_BUILD_GCC_PASS1" != "true" ] && \
+	[ "$MODE_INSTALL_GCC_PASS1" != "true" ] && \
+	[ "$MODE_BUILD_GCC_PASS2" != "true" ] && \
 	[ "$MODE_INSTALL_PASS2" != "true" ] && \
-	[ "$MODE_BUILD_LIBSTDCXX" != "true" ] && \
-	[ "$MODE_INSTALL_LIBSTDCXX" != "true" ] && \
-	[ "$MODE_LIBSTDCXX" != "true" ]
+	[ "$MODE_BUILD_LIBSTDCXX_PASS1" != "true" ] && \
+	[ "$MODE_INSTALL_LIBSTDCXX_PASS1" != "true" ] && \
+	[ "$MODE_BUILD_LIBSTDCXX_PASS2" != "true" ] && \
+	[ "$MODE_INSTALL_LIBSTDCXX_PASS2" != "true" ]
 then
 	logprint "No option selected during execution."
 	mode_help
@@ -425,39 +488,51 @@ if [ "$MODE_STAGE" = "true" ]; then
 	assert_zero $?
 fi
 
-if [ "$MODE_BUILD_PASS1" = "true" ]; then
+if [ "$MODE_BUILD_GCC_PASS1" = "true" ]; then
 	logprint "Build of PASS1 selected."
-	mode_build_pass1
+	mode_build_gcc_pass1
 	assert_zero $?
 fi
 
-if [ "$MODE_INSTALL_PASS1" = "true" ]; then
+if [ "$MODE_INSTALL_GCC_PASS1" = "true" ]; then
 	logprint "Install of PASS1 selected."
-	mode_install_pass1
+	mode_install_gcc_pass1
 	assert_zero $?
 fi
 
-if [ "$MODE_BUILD_PASS2" = "true" ]; then
+if [ "$MODE_BUILD_GCC_PASS2" = "true" ]; then
 	logprint "Build of PASS2 selected."
-	mode_build_pass2
+	mode_build_gcc_pass2
 	assert_zero $?
 fi
 
-if [ "$MODE_INSTALL_PASS2" = "true" ]; then
+if [ "$MODE_INSTALL_GCC_PASS2" = "true" ]; then
 	logprint "Install of PASS2 selected."
-	mode_install_pass2
+	mode_install_gcc_pass2
 	assert_zero $?
 fi
 
-if [ "$MODE_BUILD_LIBSTDCXX" = "true" ]; then
+if [ "$MODE_BUILD_LIBSTDCXX_PASS1" = "true" ]; then
 	logprint "Build of LIBSTDC++ selected."
-	mode_build_libstdcxx
+	mode_build_libstdcxx_pass1
 	assert_zero $?
 fi
 
-if [ "$MODE_INSTALL_LIBSTDCXX" = "true" ]; then
+if [ "$MODE_INSTALL_LIBSTDCXX_PASS1" = "true" ]; then
 	logprint "INSTALL of LIBSTDC++ selected."
-	mode_install_libstdcxx
+	mode_install_libstdcxx_pass1
+	assert_zero $?
+fi
+
+if [ "$MODE_BUILD_LIBSTDCXX_PASS2" = "true" ]; then
+	logprint "Build of LIBSTDC++ selected."
+	mode_build_libstdcxx_pass2
+	assert_zero $?
+fi
+
+if [ "$MODE_INSTALL_LIBSTDCXX_PASS2" = "true" ]; then
+	logprint "INSTALL of LIBSTDC++ selected."
+	mode_install_libstdcxx_pass2
 	assert_zero $?
 fi
 

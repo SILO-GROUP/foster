@@ -1,6 +1,5 @@
-# ALFS-NG
-An experimental fork of the SURRO/Foster project to examine using the
-Rex utility to automate parts of the LFS toolchain generation.  
+# Foster-D
+The future of SURRO Linux.
 
 # Requirements
 Make, g++, and Rex ( installed at `/usr/local/bin/rex` ).
