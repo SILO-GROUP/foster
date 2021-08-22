@@ -20,5 +20,5 @@ logprint() {
 	| tee -a "${LOG_DIR}/${LOGFILE}"
 }
 
-logprint "You may now chroot into your new sysroot by typing `make enter_chroot`."
+logprint "You may now chroot into your new sysroot by typing 'make enter_chroot'."
 logprint "Thanks for hanging in there!"

@@ -14,7 +14,7 @@
 			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
-			"name":			"stage, compile, install binutils pass1",
+			"name":			"stage, build, install binutils pass1",
 			"active":		true,
 			"required":		true,
 			"target":		"components/x86_64/binutils.bash --pass1",
@@ -27,7 +27,7 @@
 			"environment":	"environments/x86_64/stage1.env.bash"
 		},
 		{
-			"name":			"stage, compile, install gcc pass1",
+			"name":			"stage, build, install gcc pass1",
 			"active":		true,
 			"required":		true,
 			"target":		"components/x86_64/gcc.bash --gcc_pass1",
@@ -187,6 +187,19 @@
 			"active":		true,
 			"required":		true,
 			"target":		"components/x86_64/grep.bash --all_temp",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"phanes",
+			"group":		"royalty",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage1.env.bash"
+		},
+		{
+			"name":			"stage, build, install getopt",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/getopt_tmp.bash",
 			"rectify":		false,
 			"rectifier":	"",
 			"log":			true,
@@ -376,6 +389,19 @@
 			"group":		"root",
 			"shell":		"/bin/bash",
 			"environment":	"environments/x86_64/stage1.env.bash"
+		},
+		{
+			"name":			"build, install libstdcxx/pass2",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/libstdcxx_pass2.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/chroot_bootstrap.bash"
 		}
 	]
 }

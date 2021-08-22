@@ -7,12 +7,12 @@
 			"comment": "create directories and users necessary to build"
 		},
 		{
-			"name":"stage, compile, install binutils pass1", 
+			"name":"stage, build, install binutils pass1", 
 			"dependencies": [ null ],
 			"comment": "5.2"
 		},
 		{
-			"name":"stage, compile, install gcc pass1", 
+			"name":"stage, build, install gcc pass1", 
 			"dependencies": [ null ],
 			"comment": "5.3"
 		},
@@ -117,6 +117,11 @@
 			"comment": "6.18"
 		},
 		{
+			"name":"stage, build, install getopt", 
+			"dependencies": [ null ],
+			"comment": "7.6 and prepares chroot for rex"
+		},
+		{
 			"name":"fix sysroot ownership", 
 			"dependencies": [ null ],
 			"comment": "7.2 Preparing the Chroot"
@@ -139,7 +144,7 @@
 		{
 			"name":"prepare virtual kernel filesystems", 
 			"dependencies": [ null ],
-			"comment": "7.3"
+			"comment": "7.3 and prepares chroot for rex"
 		},
 		{
 			"name":"notify of successful completion", 

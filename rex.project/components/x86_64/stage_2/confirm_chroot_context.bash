@@ -1,5 +1,6 @@
-if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]; then
-  echo "We are chrooted!"
+if [ "$(stat -c %d:%i / 2>/dev/null)" != "$(stat -c %d:%i /proc/1/root/. 2>/dev/null)" ]; then
+	echo "We are chrooted!"
 else
-  assert_zero 1
+	echo "We are not in a chroot."
+	assert_zero 1
 fi

@@ -81,5 +81,6 @@ is_mounted ${T_SYSROOT}${PROJECT_ROOT} || mount -v --bind ${PROJECT_ROOT} ${T_SY
 assert_zero $?
 
 logprint "Copy Rex to Chroot"
-stat ${T_SYSROOT}/usr/local/bin/rex || cp -Rf /usr/local/bin/rex ${T_SYSROOT}/usr/local/bin/rex
+mkdir -p ${T_SYSROOT}/usr/local/bin
+stat ${T_SYSROOT}/usr/local/bin/rex 2>/dev/null || cp -Rf /usr/local/bin/rex ${T_SYSROOT}/usr/local/bin/rex
 assert_zero $?

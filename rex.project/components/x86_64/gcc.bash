@@ -48,7 +48,7 @@ ARGUMENT_LIST=(
 )
 
 mode_help() {
-	echo "${APPNAME} [ --stage ] [ --build_gcc_pass1 ] [ --install_gcc_pass1 ] [ --build_gcc_pass2 ] [ --install_gcc_pass2 ] [ --build_libstdcxx_pass1 ] [ --install_libstdcxx_pass1 ] [ --build_libstdcxx_pass2 ] [ --install_libstdcxx_pass2 ] [ --gcc_pass1 ] [ --gcc_pass2 ] [ --libstdcxx_pass1 ] [ --libstdcxx_pass1 ] [ --help ]"
+	echo "${APPNAME} [ --stage ] [ --build_gcc_pass1 ] [ --install_gcc_pass1 ] [ --build_gcc_pass2 ] [ --install_gcc_pass2 ] [ --build_libstdcxx_pass1 ] [ --install_libstdcxx_pass1 ] [ --build_libstdcxx_pass2 ] [ --install_libstdcxx_pass2 ] [ --gcc_pass1 ] [ --gcc_pass2 ] [ --libstdcxx_pass1 ] [ --libstdcxx_pass2 ] [ --help ]"
 	exit 0
 }
 
@@ -248,13 +248,17 @@ mode_build_libstdcxx_pass1() {
 }
 
 mode_build_libstdcxx_pass2() {
+# this is meant to be kicked off from the chroot context.  do not expect
+# this to work at all with a direct execution context from outside of the chroot.
+
 	logprint "Starting build of LIBSTDC++/pass2..."
 	
 	logprint "Entering build dir."	
 	pushd "${T_SOURCE_DIR}"
 	assert_zero $?
 	
-	ln -s gthr-posix.h
+	ln -s gthr-posix.h libgcc/gthr-default.h
+	assert_zero $?
 	
 	mkdir -p build
 	pushd build
@@ -264,13 +268,12 @@ mode_build_libstdcxx_pass2() {
 	# Note: This currently depends on crosstools being in the top level dir of the T_SYSROOT
 	# use a substring in the future
 	../libstdc++-v3/configure \
-		--host=${T_TRIPLET} \
-		--build=$(../config.guess) \
+		CXXFLAGS="-g -O2 -D_GNU_SOURCE" \
 		--prefix=/usr \
 		--disable-multilib \
 		--disable-nls \
-		--disable-libstdcxx-pch \
-		--with-gxx-include-dir=/$(basename ${CROSSTOOLS_DIR})/${T_TRIPLET}/include/c++/10.2.0
+		--host=${T_TRIPLET} \
+		--disable-libstdcxx-pch
 	assert_zero $?
 	
 	logprint "Compiling..."
@@ -287,6 +290,18 @@ mode_install_libstdcxx_pass1() {
 	assert_zero $?
 	
 	make DESTDIR=${T_SYSROOT} install
+	assert_zero $?
+	
+	logprint "Install of libstdcxx complete."
+}
+
+mode_install_libstdcxx_pass2() {
+	logprint "Starting install of LIBSTDC++/pass1..."
+	
+	pushd "${T_SOURCE_DIR}/build"
+	assert_zero $?
+	
+	make install
 	assert_zero $?
 	
 	logprint "Install of libstdcxx complete."
@@ -456,8 +471,6 @@ if [ "$MODE_LIBSTDCXX_PASS2" = "true" ]; then
 	MODE_BUILD_LIBSTDCXX_PASS2=true
 	MODE_INSTALL_LIBSTDCXX_PASS2=true
 fi
-
-echo $MODE_BUILD_GCC_PASS1
 
 # if no options were selected, then show help and exit
 if \

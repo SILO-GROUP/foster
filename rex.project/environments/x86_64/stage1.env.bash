@@ -47,7 +47,7 @@ BUILD_GROUP="royalty"
 
 PATH=/usr/bin
 if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
-PATH=${CROSSTOOLS_DIR}/bin:$PATH:/usr/sbin
+PATH=${CROSSTOOLS_DIR}/bin:$PATH:/usr/sbin:/usr/local/bin
 
 CONFIG_SITE=${T_SYSROOT}/usr/share/config.site
 
