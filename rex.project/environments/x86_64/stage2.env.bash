@@ -11,9 +11,6 @@ set +h
 
 TERM=xterm-256color
 
-umask 022
-LC_ALL=POSIX
-
 # fail the unit in the event of a non-zero value passed
 # used primarily to check exit codes on previous commands
 # also a great convenient place to add in a "press any key to continue"
@@ -33,10 +30,10 @@ PATCHES_DIR=${PROJECT_ROOT}/staging/patches
 T_SYSROOT=""
 LOGS_ROOT=${PROJECT_ROOT}/logs/scripts
 
-CROSSTOOLS_DIR=${T_SYSROOT}/crosstools
-TEMP_STAGE_DIR=${T_SYSROOT}/source_stage
+CROSSTOOLS_DIR=/crosstools
+TEMP_STAGE_DIR=/source_stage
 
-ARCHLIB_DIR=${T_SYSROOT}/lib64
+ARCHLIB_DIR=/lib64
 
 T_VENDOR="rhl"
 T_ARCH=$(uname -m)
@@ -45,11 +42,9 @@ T_TRIPLET=${T_ARCH}-${T_VENDOR}-linux-gnu
 BUILD_USER="phanes"
 BUILD_GROUP="royalty"
 
-PATH=/usr/bin
-if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
-PATH=${CROSSTOOLS_DIR}/bin:$PATH:/usr/sbin
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
 
-CONFIG_SITE=${T_SYSROOT}/usr/share/config.site
+CONFIG_SITE=/usr/share/config.site
 
 MAKEFLAGS="-j$(nproc)"
 

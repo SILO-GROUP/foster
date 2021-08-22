@@ -5,6 +5,11 @@
 			"name":"confirm chroot context", 
 			"dependencies": [ null ],
 			"comment": "fails if we are executing out of chroot"
+		},
+		{
+			"name":"stage, build, install gettext", 
+			"dependencies": [ null ],
+			"comment": "all from da chroot context from here"
 		}
 	]
 }

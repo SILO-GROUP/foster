@@ -12,6 +12,19 @@
 			"group":		"root",
 			"shell":		"/bin/bash",
 			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install gettext",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/gettext.bash --all_temp",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
 		}
 	]
 }
