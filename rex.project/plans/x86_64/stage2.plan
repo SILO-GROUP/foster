@@ -10,6 +10,31 @@
 			"name":"stage, build, install gettext", 
 			"dependencies": [ null ],
 			"comment": "all from da chroot context from here"
+		},
+		{
+			"name":"stage, build, install bison", 
+			"dependencies": [ null ],
+			"comment": "all from da chroot context from here"
+		},
+		{
+			"name":"stage, build, install perl", 
+			"dependencies": [ null ],
+			"comment": "all from da chroot context from here"
+		},
+		{
+			"name":"stage, build, install python3", 
+			"dependencies": [ null ],
+			"comment": "all from da chroot context from here"
+		},
+		{
+			"name":"stage, build, install texinfo", 
+			"dependencies": [ null ],
+			"comment": "all from da chroot context from here"
+		}
+		{
+			"name":"stage, build, install util-linux", 
+			"dependencies": [ null ],
+			"comment": "all from da chroot context from here"
 		}
 	]
 }

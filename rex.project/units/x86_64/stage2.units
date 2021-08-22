@@ -25,6 +25,71 @@
 			"group":		"root",
 			"shell":		"/bin/bash",
 			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install bison",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/bison.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install perl",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/perl.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install python3",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/python3.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install texinfo",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/texinfo.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install util-linux",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/util-linux.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
 		}
 	]
 }

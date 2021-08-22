@@ -30,14 +30,14 @@ build_stage1:
 
 # works around apparently some kind of nesting bug w/ Rex and file descriptors
 hotfix_chroot_compiler:
-	@sudo ${workspace}/rex.project/components/x86_64/libstdcxx_pass2.bash ${workspace}
+	@sudo ${workspace}/rex.project/components/x86_64/stage_1/libstdcxx_pass2.bash ${workspace}
 
 # builds the rest of the system from inside the chroot
 build_stage2:
 	sudo ${workspace}/makefile.controls/stage_2_init.sh ${workspace}
 
 all:
-	@sudo ${workspace}/makefile.controls/build_chroot.sh && sudo ${workspace}/rex.project/components/x86_64/libstdcxx_pass2.bash ${workspace} && sudo ${workspace}/makefile.controls/stage_2_init.sh ${workspace}
+	@sudo ${workspace}/makefile.controls/build_chroot.sh && sudo ${workspace}/rex.project/components/x86_64/stage_1/libstdcxx_pass2.bash ${workspace} && sudo ${workspace}/makefile.controls/stage_2_init.sh ${workspace}
 
 # enter the chroot after a stage1 build so we can play around 
 enter_chroot:
