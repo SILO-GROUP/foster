@@ -208,7 +208,7 @@ if [ "$MODE_BUILD_TEMP" = "true" ]; then
 	assert_zero $?
 fi
 
-if [ "$MODE_INSTALL" = "true" ]; then
+if [ "$MODE_INSTALL_TEMP" = "true" ]; then
 	logprint "Install of ${APPNAME} selected."
 	mode_install_temp
 	assert_zero $?

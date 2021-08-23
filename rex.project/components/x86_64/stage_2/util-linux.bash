@@ -10,10 +10,10 @@ set -a
 # Configuration:
 # ----------------------------------------------------------------------
 # the name of this application
-APPNAME="python"
+APPNAME="util-linux"
 
 # the version of this application
-VERSION="3.9.2"
+VERSION="2.36.2"
 
 # ----------------------------------------------------------------------
 # Variables and functions sourced from Environment:

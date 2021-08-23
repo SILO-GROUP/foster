@@ -30,7 +30,7 @@
 			"name":"stage, build, install texinfo", 
 			"dependencies": [ null ],
 			"comment": "all from da chroot context from here"
-		}
+		},
 		{
 			"name":"stage, build, install util-linux", 
 			"dependencies": [ null ],

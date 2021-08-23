@@ -134,7 +134,7 @@ mode_build() {
 	assert_zero $?
 		
 	logprint "Configuring ${APPNAME}..."
-	./configure \
+	sh Configure \
 		-des \
 		-Dprefix=/usr \
 		-Dvendorprefix=/usr \

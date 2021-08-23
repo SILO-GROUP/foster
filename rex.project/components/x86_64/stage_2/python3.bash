@@ -10,7 +10,7 @@ set -a
 # Configuration:
 # ----------------------------------------------------------------------
 # the name of this application
-APPNAME="python"
+APPNAME="Python"
 
 # the version of this application
 VERSION="3.9.2"
