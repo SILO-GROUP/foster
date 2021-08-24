@@ -30,18 +30,18 @@ VERSION="2.33"
 # register mode selections
 ARGUMENT_LIST=(
     "stage"
-    "build_pass1"
-    "install_pass1"
-    "pass1"
+    "build"
+    "install"
+    "all"
     "help"
 )
 
 # modes to associate with switches
 # assumes you want nothing done unless you ask for it.
 MODE_STAGE=false
-MODE_BUILD_PASS1=false
-MODE_INSTALL_PASS1=false
-MODE_PASS1=false
+MODE_BUILD=false
+MODE_INSTALL=false
+MODE_ALL=false
 MODE_HELP=false
 
 # the file to log to
@@ -74,16 +74,16 @@ while [[ $# -gt 0 ]]; do
             MODE_STAGE=true
             shift 1
             ;;
-        --build_pass1)
-            MODE_BUILD_PASS1=true
+        --build)
+            MODE_BUILD=true
             shift 1
             ;;
-        --install_pass1)
-            MODE_INSTALL_PASS1=true
+        --install)
+            MODE_INSTALL=true
             shift 1
             ;;
-        --pass1)
-            MODE_PASS1=true
+        --all)
+            MODE_ALL=true
             shift 1
             ;;
         --help)
@@ -124,37 +124,23 @@ mode_stage() {
 }
 
 # when the build_pass1 mode is enabled, this will execute
-mode_build_pass1() {
-	# Apply necessary symlinks
-	# Adjust these for 
-	# - your architecture
-	# - your host distro
-	
-	logprint "Setting up compatibility and LSB symlinks..."
-	logprint "Entering TEMP_STAGE_DIR"
-	pushd ${TEMP_STAGE_DIR}
-	assert_zero $?
-	
-	# fuck this part in particular!
-	ln -sfv ../lib/ld-linux-x86-64.so.2 ${T_SYSROOT}/lib64
-	assert_zero $?
-	
-	ln -sfv ../lib/ld-linux-x86-64.so.2 ${T_SYSROOT}/lib64/ld-lsb-x86-64.so.3
-	assert_zero $?
-	popd
+mode_build() {
 	
 	# patch, configure and build
-	logprint "Starting build of ${APPNAME}..."
+	logprint "Starting build of ${APPNAME}/pass1 of stage2..."
 	
-	logprint "Entering build dir."	
+	logprint "Entering stage dir."	
 	pushd "${T_SOURCE_DIR}"
 	assert_zero $?
 	
-	# patches
 	logprint "Applying patches..."
-	patch -Np1 < "${PATCHES_DIR}/glibc-2.33-fhs-1.patch"
+	patch -Np1 -i ${PATCHES_DIR}/glibc-2.33-fhs-1.patch
 	assert_zero $?
-		
+
+	patch -Np1 -i ${PATCHES_DIR}/glibc-2.33-chroot_repair.patch
+	assert_zero $?
+	
+	logprint "Entering temp build dir..."
 	mkdir -p build
 	pushd build
 	assert_zero $?
@@ -162,63 +148,112 @@ mode_build_pass1() {
 	logprint "Configuring ${APPNAME}..."
 	../configure \
 		--prefix=/usr \
-		--host=${T_TRIPLET} \
-		--build=$(../scripts/config.guess) \
+		--disable-werror \
 		--enable-kernel=3.2 \
-		--with-headers=${T_SYSROOT}/usr/include \
+		--enable-stack-protector=strong \
+		--with-headers=/usr/include \
 		libc_cv_slibdir=/lib
-
 	assert_zero $?
 	
 	logprint "Compiling..."
 	make
 	assert_zero $?
-
+	
+	logprint "Testing build..."
+	make check
+	
 	logprint "Build operation complete."
 }
 
-mode_install_pass1() {
+mode_install() {
 	logprint "Starting install of ${APPNAME}..."
 	pushd "${T_SOURCE_DIR}/build"
 	assert_zero $?
+
+	logprint "Creating empty ld.so.conf"
+	touch /etc/ld.so.conf
+	assert_zero $?
+	
+	logprint "Patching the makefile... :/"
+	sed '/test-installation/s@$(PERL)@echo not running@' -i ../Makefile
+	assert_zero $?
 	
 	logprint "Installing..."
-	make DESTDIR=${T_SYSROOT} install
-	assert_zero $?
-		
-	logprint "Install operation complete."
-	
-	logprint "Wrapping up headers..."
-	dirs -c
-	pushd "${T_SOURCE_DIR}"
+	make install
 	assert_zero $?
 	
-	logprint "Cleaning up..."
-	${CROSSTOOLS_DIR}/libexec/gcc/${T_TRIPLET}/10.2.0/install-tools/mkheaders
+	logprint "Doing the ridiculous glibc post-install work..."
+	logprint "Installing /etc/nscd.conf"
+	cp -v ../nscd/nscd.conf /etc/nscd.conf
 	assert_zero $?
 	
+	logprint "Installing systemD services and support for nscd..."
+	install -v -Dm644 ../nscd/nscd.tmpfiles /usr/lib/tmpfiles.d/nscd.conf
+	assert_zero $?
+	
+	install -v -Dm644 ../nscd/nscd.service /lib/systemd/system/nscd.service
+	assert_zero $?
+	
+	logprint "Installing locale definitions..."
+	make localedata/install-locales
+	assert_zero $?
+	
+	logprint "Installing /etc/nsswitch.conf"
+	cp -vf ${CONFIG_DIR}/etc/nsswitch.conf /etc/nsswitch.conf
+	assert_zero $?
+	
+	logprint "Installing tzdata which glibc should totally be remotely related to (not)..."
+	mkdir -p tzdata
+	pushd tzdata
+	assert_zero $?
+	
+	tar -xvf ${SOURCES_DIR}/tzdata2021a.tar.gz -C ./ 
+	ZI=/usr/share/zoneinfo
+	mkdir -p ${ZI}/{posix,right}
+	for TZ in etcetera southamerica northamerica europe africa antarctica asia australiasia backward; do
+		zic -L /dev/null -d ${ZI} ${TZ}
+		zic -L /dev/null -d ${ZI}/posix ${TZ}
+		zic -L leapseconds -d ${ZI}/right ${TZ}
+	done
+
+	cp -v zone.tab zone1970.tab iso3166.tab ${ZI}
+	assert_zero $?
+	
+	# consider removing this and replacing all of this with an install utility
+	zic -d ${ZI} -p America/New_York
+	assert_zero $?
+	unset ${ZI}
+
+	logprint "Setting timezone to UTC..."
+	ln -sfv /usr/share/zoneinfo/UTC /etc/localtime
+	assert_zero $?
+	
+	logprint "Installing /etc/ld.so.conf"
+	cp -vf ${CONFIG_DIR}/etc/ld.so.conf /etc/ld.so.conf
+	assert_zero $?
+	
+
+	logprint "Glibc install operation complete.  Jesus-- we think?"
 }
 
 
 mode_help() {
-	echo "${APPNAME} [ --stage ] [ --build_pass1 ] [ --install_pass1 ] [ --pass1 ] [ --help ]"
-	exit 0
+	echo "${APPNAME} [ --stage ] [ --build ] [ --install ] [ --all ] [ --help ]"
+	exit 1
 }
 
-# MODE_PASS1 is a meta toggle for all pass1 modes.  Modes will always 
-# run in the correct order.
-if [ "$MODE_PASS1" = "true" ]; then
+if [ "$MODE_ALL" = "true" ]; then
 	MODE_STAGE=true
-	MODE_BUILD_PASS1=true
-	MODE_INSTALL_PASS1=true
+	MODE_BUILD=true
+	MODE_INSTALL=true
 fi
 
 # if no options were selected, then show help and exit
 if \
 	[ "$MODE_HELP" != "true" ] && \
 	[ "$MODE_STAGE" != "true" ] && \
-	[ "$MODE_BUILD_PASS1" != "true" ] && \
-	[ "$MODE_INSTALL_PASS1" != "true" ]
+	[ "$MODE_BUILD" != "true" ] && \
+	[ "$MODE_INSTALL" != "true" ]
 then
 	logprint "No option selected during execution."
 	mode_help
@@ -236,15 +271,15 @@ if [ "$MODE_STAGE" = "true" ]; then
 	assert_zero $?
 fi
 
-if [ "$MODE_BUILD_PASS1" = "true" ]; then
-	logprint "Build of PASS1 selected."
-	mode_build_pass1
+if [ "$MODE_BUILD" = "true" ]; then
+	logprint "Build of ${APPNAME} selected."
+	mode_build
 	assert_zero $?
 fi
 
-if [ "$MODE_INSTALL_PASS1" = "true" ]; then
-	logprint "Install of PASS1 selected."
-	mode_install_pass1
+if [ "$MODE_INSTALL" = "true" ]; then
+	logprint "Install of ${APPNAME} selected."
+	mode_install
 	assert_zero $?
 fi
 

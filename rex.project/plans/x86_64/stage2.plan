@@ -35,6 +35,41 @@
 			"name":"stage, build, install util-linux", 
 			"dependencies": [ null ],
 			"comment": "all from da chroot context from here"
+		},
+		{
+			"name": "install man pages", 
+			"dependencies": [ null ],
+			"comment": "all from da chroot context from here"
+		},
+		{
+			"name": "install iana-etc files", 
+			"dependencies": [ null ],
+			"comment": "all from da chroot context from here"
+		},
+		{
+			"name": "stage, build, install stage2 glibc", 
+			"dependencies": [ null ],
+			"comment": "just in case you're not tired of endlessly f*cking with glibc"
+		},
+		{
+			"name": "stage, build, install zlib", 
+			"dependencies": [ null ],
+			"comment": "8.6"
+		},
+		{
+			"name": "stage, build, install bzip2", 
+			"dependencies": [ null ],
+			"comment": "8.7"
+		},
+		{
+			"name": "stage, build, install xz", 
+			"dependencies": [ null ],
+			"comment": "8.8"
+		},
+		{
+			"name": "stage, build, install zstd", 
+			"dependencies": [ null ],
+			"comment": "8.9"
 		}
 	]
 }

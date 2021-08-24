@@ -39,7 +39,7 @@ TEMP_STAGE_DIR=/source_stage
 
 ARCHLIB_DIR=/lib64
 
-T_VENDOR="rhl"
+T_VENDOR="darkhorse"
 T_ARCH=$(uname -m)
 T_TRIPLET=${T_ARCH}-${T_VENDOR}-linux-gnu
 

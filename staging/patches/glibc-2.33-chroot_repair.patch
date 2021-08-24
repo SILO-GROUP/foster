@@ -1,0 +1,19 @@
+Submitted By:            Chris Punches (conversion from LFS 10.1 sed call)
+Date:                    2021-08-22
+Revised By:              Chris Punches
+Initial Package Version: 2.33
+Upstream Status:         Not Applicable
+Origin:                  Self
+Description:             This patch repairs issues with chrooted 
+						 applications due to a bug in glibc-2.33
+
+--- glibc/nss/nss_database.c	2021-08-22 22:58:26.011891123 -0400
++++ glibc/nss/nss_database.c	2021-08-22 22:58:52.792183321 -0400
+@@ -400,6 +400,7 @@
+     {
+       /* Change detected; disable reloading.  */
+       atomic_store_release (&local->data.reload_disabled, 1);
++      *result = local->data.services[database_index];
+       __libc_lock_unlock (local->lock);
+       __nss_module_disable_loading ();
+       return true;

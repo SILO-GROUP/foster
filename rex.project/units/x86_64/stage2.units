@@ -90,6 +90,97 @@
 			"group":		"root",
 			"shell":		"/bin/bash",
 			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"install man pages",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/man-pages.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"install iana-etc files",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/iana-etc.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install stage2 glibc",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/glibc.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install zlib",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/zlib.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install bzip2",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/bzip2.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		}
+		{
+			"name":			"stage, build, install xz",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/xz.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install zstd",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/zstd.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
 		}
 	]
 }
