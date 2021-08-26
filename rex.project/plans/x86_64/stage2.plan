@@ -62,12 +62,17 @@
 			"comment": "8.7"
 		},
 		{
-			"name": "stage, build, install xz", 
+			"name": "stage, build, install xz/pass2", 
 			"dependencies": [ null ],
 			"comment": "8.8"
 		},
 		{
 			"name": "stage, build, install zstd", 
+			"dependencies": [ null ],
+			"comment": "8.9"
+		},
+		{
+			"name": "stage, build, install file/pass2", 
 			"dependencies": [ null ],
 			"comment": "8.9"
 		}

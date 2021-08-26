@@ -10,10 +10,10 @@ set -a
 # Configuration:
 # ----------------------------------------------------------------------
 # the name of this application
-APPNAME="xz"
+APPNAME="file"
 
 # the version of this application
-VERSION="5.2.5"
+VERSION="5.39"
 
 # ----------------------------------------------------------------------
 # Variables and functions sourced from Environment:
@@ -108,7 +108,7 @@ logprint "Initializing the ${APPNAME} utility..."
 
 # when the stage mode is enabled, this will execute
 mode_stage() {
-	logprint "Starting stage of ${APPNAME}/pass2..."
+	logprint "Starting stage of ${APPNAME}..."
 
 	logprint "Removing any pre-existing staging for ${APPNAME}."
 	rm -Rf "${T_SOURCE_DIR}"*
@@ -133,8 +133,8 @@ mode_build() {
 	pushd "${T_SOURCE_DIR}"
 	assert_zero $?
 		
-	logprint "Configuring ${APPNAME}..."
-	./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/xz-5.2.5
+	logprint "Configuring ${APPNAME}"
+	./configure --prefix=/usr
 	assert_zero $?
 	
 	logprint "Compiling..."
@@ -155,17 +155,7 @@ mode_install() {
 	logprint "Installing..."
 	make install
 	assert_zero $?
-	
-	logprint "Cleaning up..."
-	mv -v /usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} /bin
-	assert_zero $?
-	
-	mv -v /usr/lib/liblzma.so.* /lib
-	assert_zero $?
-	
-	ln -svf ../../lib/$(readlink /usr/lib/liblzma.so) /usr/lib/liblzma.so
-	assert_zero $?
-	
+			
 	logprint "Install operation complete."
 }
 

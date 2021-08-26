@@ -9,7 +9,7 @@ TIMESTAMP="$(date +%Y-%m-%d_%H:%M:%S)"
 # the file to log to
 LOGFILE="${APPNAME}.log"
 
-LOG_DIR="${LOGS_ROOT}/${APPNAME}-${TIMESTAMP}"
+LOG_DIR="$1/logs/scripts/${APPNAME}-${TIMESTAMP}"
 
 logprint() {
 	mkdir -p "${LOG_DIR}"

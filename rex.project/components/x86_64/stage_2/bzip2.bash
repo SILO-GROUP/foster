@@ -132,21 +132,22 @@ mode_build() {
 	logprint "Entering stage dir."	
 	pushd "${T_SOURCE_DIR}"
 	assert_zero $?
-		
+
 	logprint "Applying documentation install patch..."
-	patch -Np1 ${PATCHES_DIR}/bzip2-1.0.8-install_docs-1.patch
+	patch -Np1 -i ${PATCHES_DIR}/bzip2-1.0.8-install_docs-1.patch
 	assert_zero $?
-	
+		
 	# create this
 	logprint "Applying relative symbolic links patch..."
-	patch -Np1 ${PATCHES_DIR}/bzip2-1.0.8-relative_links.patch
+	patch -Np1 -i ${PATCHES_DIR}/bzip2-1.0.8-relative_links.patch
 	assert_zero $?
 
 	# create this
 	logprint "Applying man page path fix patch..."
-	patch -Np1 ${PATCHES_DIR}/bzip2-1.0.8-man_path.patch
+	patch -Np1 -i ${PATCHES_DIR}/bzip2-1.0.8-man_path.patch
 	assert_zero $?
 	
+
 	logprint "Compiling..."
 	make -f Makefile-libbz2_so
 	assert_zero $?

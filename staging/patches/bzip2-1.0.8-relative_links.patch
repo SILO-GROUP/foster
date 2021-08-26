@@ -1,14 +1,7 @@
-Submitted By:            Chris Punches <chris.punches@silogroup.org>
-Date:                    2021-08-23
-Initial Package Version: 1.0.8
-Origin:                  LFS 10.1, Sec. 8.7
-Description:             Ensures installation of symbolic links are
-						 relative.
-
-diff -ruN bzip.original/Makefile bzip.updated/Makefile
---- bzip2/Makefile	2021-08-24 03:08:45.930308115 +0000
-+++ bzip2/Makefile	2021-08-24 03:09:31.999079836 +0000
-@@ -90,14 +90,14 @@
+diff -ruN bzip2.orig/Makefile bzip2.updated/Makefile
+--- bzip2/Makefile	2021-08-26 03:51:45.078127165 +0000
++++ bzip2/Makefile	2021-08-26 03:52:33.058839546 +0000
+@@ -91,14 +91,14 @@
  	cp -f libbz2.a $(PREFIX)/lib
  	chmod a+r $(PREFIX)/lib/libbz2.a
  	cp -f bzgrep $(PREFIX)/bin/bzgrep

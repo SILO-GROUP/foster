@@ -1,13 +1,6 @@
-Submitted By:            Chris Punches <chris.punches@silogroup.org>
-Date:                    2021-08-23
-Initial Package Version: 1.0.8
-Origin:                  LFS 10.1, Sec. 8.7
-Description:             Ensures manpages are installed to the correct
-						 location.
-
-diff -ruN bzip.original/Makefile bzip.updated/Makefile
---- bzip/Makefile	2021-08-24 03:08:45.930308115 +0000
-+++ bzip/Makefile	2021-08-24 03:11:44.993331552 +0000
+diff -ruN bzip2.orig/Makefile bzip2.updated/Makefile
+--- bzip2/Makefile	2021-08-26 03:54:06.448231823 +0000
++++ bzip2/Makefile	2021-08-26 03:54:41.680758826 +0000
 @@ -72,8 +72,8 @@
  install: bzip2 bzip2recover
  	if ( test ! -d $(PREFIX)/bin ) ; then mkdir -p $(PREFIX)/bin ; fi
@@ -16,10 +9,10 @@ diff -ruN bzip.original/Makefile bzip.updated/Makefile
 -	if ( test ! -d $(PREFIX)/man/man1 ) ; then mkdir -p $(PREFIX)/man/man1 ; fi
 +	if ( test ! -d $(PREFIX)/share/man ) ; then mkdir -p $(PREFIX)/share/man ; fi
 +	if ( test ! -d $(PREFIX)/share/man/man1 ) ; then mkdir -p $(PREFIX)/share/man/man1 ; fi
+ 	if ( test ! -d $(PREFIX)/$(DOCDIR) ) ; then mkdir -p $(PREFIX)/$(DOCDIR); fi
  	if ( test ! -d $(PREFIX)/include ) ; then mkdir -p $(PREFIX)/include ; fi
  	cp -f bzip2 $(PREFIX)/bin/bzip2
- 	cp -f bzip2 $(PREFIX)/bin/bunzip2
-@@ -83,8 +83,8 @@
+@@ -84,8 +84,8 @@
  	chmod a+x $(PREFIX)/bin/bunzip2
  	chmod a+x $(PREFIX)/bin/bzcat
  	chmod a+x $(PREFIX)/bin/bzip2recover
@@ -30,9 +23,9 @@ diff -ruN bzip.original/Makefile bzip.updated/Makefile
  	cp -f bzlib.h $(PREFIX)/include
  	chmod a+r $(PREFIX)/include/bzlib.h
  	cp -f libbz2.a $(PREFIX)/lib
-@@ -99,14 +99,14 @@
+@@ -100,14 +100,14 @@
  	cp -f bzdiff $(PREFIX)/bin/bzdiff
- 	ln -s -f $(PREFIX)/bin/bzdiff $(PREFIX)/bin/bzcmp
+ 	ln -s -f bzdiff $(PREFIX)/bin/bzcmp
  	chmod a+x $(PREFIX)/bin/bzdiff
 -	cp -f bzgrep.1 bzmore.1 bzdiff.1 $(PREFIX)/man/man1
 -	chmod a+r $(PREFIX)/man/man1/bzgrep.1
@@ -50,6 +43,6 @@ diff -ruN bzip.original/Makefile bzip.updated/Makefile
 +	echo ".so man1/bzgrep.1" > $(PREFIX)/share/man/man1/bzfgrep.1
 +	echo ".so man1/bzmore.1" > $(PREFIX)/share/man/man1/bzless.1
 +	echo ".so man1/bzdiff.1" > $(PREFIX)/share/man/man1/bzcmp.1
- 
- clean: 
- 	rm -f *.o libbz2.a bzip2 bzip2recover \
+ 	cp -f manual.html $(PREFIX)/$(DOCDIR)
+ 	cp -f manual.pdf $(PREFIX)/$(DOCDIR)
+ 	cp -f manual.ps $(PREFIX)/$(DOCDIR)
