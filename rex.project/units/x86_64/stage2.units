@@ -153,6 +153,7 @@
 			"log":			true,
 			"user":			"root",
 			"group":		"root",
+			"group":		"root",
 			"shell":		"/bin/bash",
 			"environment":	"environments/x86_64/stage2.env.bash"
 		},
@@ -187,6 +188,19 @@
 			"active":		true,
 			"required":		true,
 			"target":		"components/x86_64/stage_2/file.bash --all",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage2.env.bash"
+		},
+		{
+			"name":			"stage, build, install readline",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage_2/readline.bash --all",
 			"rectify":		false,
 			"rectifier":	"",
 			"log":			true,

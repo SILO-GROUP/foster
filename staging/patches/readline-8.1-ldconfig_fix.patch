@@ -1,0 +1,38 @@
+diff -ruN readline.orig/Makefile.in readline.updated/Makefile.in
+--- readline/Makefile.in	2021-08-27 03:16:39.789267107 +0000
++++ readline/Makefile.in	2021-08-27 03:16:57.781573251 +0000
+@@ -251,10 +251,8 @@
+ maybe-uninstall-pc: uninstall-pc
+ 
+ install-static: installdirs $(STATIC_LIBS) install-headers install-doc ${install_examples} install-pc
+-	-$(MV) $(DESTDIR)$(libdir)/libreadline.a $(DESTDIR)$(libdir)/libreadline.old
+ 	$(INSTALL_DATA) libreadline.a $(DESTDIR)$(libdir)/libreadline.a
+ 	-test -n "$(RANLIB)" && $(RANLIB) $(DESTDIR)$(libdir)/libreadline.a
+-	-$(MV) $(DESTDIR)$(libdir)/libhistory.a $(DESTDIR)$(libdir)/libhistory.old
+ 	$(INSTALL_DATA) libhistory.a $(DESTDIR)$(libdir)/libhistory.a
+ 	-test -n "$(RANLIB)" && $(RANLIB) $(DESTDIR)$(libdir)/libhistory.a
+ 
+diff -ruN readline.orig/support/shlib-install readline.updated/support/shlib-install
+--- readline.orig/support/shlib-install	2021-08-27 03:16:39.781266970 +0000
++++ readline.updated/support/shlib-install	2021-08-27 03:17:04.521687869 +0000
+@@ -49,9 +49,9 @@
+ # pre-install
+ 
+ if [ -z "$uninstall" ]; then
+-	${echo} $RM ${INSTALLDIR}/${LIBNAME}.${OLDSUFF}
++:
+ 	if [ -f "$INSTALLDIR/$LIBNAME" ]; then
+-		${echo} $MV $INSTALLDIR/$LIBNAME ${INSTALLDIR}/${LIBNAME}.${OLDSUFF}
++:
+ 	fi
+ fi
+ 
+@@ -79,7 +79,7 @@
+ 	IMPLIBNAME=`echo ${LIBNAME} \
+ 		| sed -e 's,^cyg,lib,' -e 's,[0-9]*.dll$,.dll.a,'`
+ 	if [ -z "$uninstall" ]; then
+-		${echo} $RM ${BINDIR}/${LIBNAME}.${OLDSUFF}
++:
+ 		if [ -f "$BINDIR/$LIBNAME" ]; then
+ 			${echo} $MV $BINDIR/$LIBNAME $BINDIR/$LIBNAME.$OLDSUFF
+ 		fi

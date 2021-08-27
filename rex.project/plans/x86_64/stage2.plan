@@ -74,7 +74,12 @@
 		{
 			"name": "stage, build, install file/pass2", 
 			"dependencies": [ null ],
-			"comment": "8.9"
+			"comment": "8.10"
+		},
+		{
+			"name": "stage, build, install readline", 
+			"dependencies": [ null ],
+			"comment": "8.11"
 		}
 	]
 }
