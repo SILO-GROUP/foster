@@ -17,7 +17,8 @@ set -a
 # parent directory for most other directories
 project_root="$(dirname $(readlink -f "${BASH_SOURCE[0]}"))"
 
-# the project files for the make system that is used to orchestrate the project
+# the project files for the make system that is used to orchestrate the 
+# build steps
 make_dir=${project_root}/make.project
 
 # the stage directory.  this contains the mutable directory where 
@@ -46,9 +47,16 @@ patches_dir=${stage_dir}/patches
 # get compiled for the initial chroot/sysroot
 sources_dir=${stage_dir}/sources
 
-# the rex project directory contains 
+# the rex project directory contains all the componennts used by the rex
+# utility when it takes over compilation
 rex_dir=${project_root}/rex.project
 
+#
+## Variables
+## Tier 2
+#
+
+# The target SYSROOT being compiled
 T_SYSROOT=${artifacts_dir}/T_SYSROOT
 
 #

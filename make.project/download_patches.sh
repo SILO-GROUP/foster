@@ -12,6 +12,6 @@
 echo "Clearing existing patches..."
 rm -Rf ${patches_dir}
 
-git clone https://source.silogroup.org/SURRO-Linux/Patches.git ${patches_dir}
+git clone https://source.silogroup.org/SURRO-Linux/patches.git ${patches_dir}
 
 echo "Download returned with exit code '$?'."

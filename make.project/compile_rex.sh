@@ -1,5 +1,5 @@
 #!/bin/bash
 
-pushd ${artifacts}/rex
+pushd ${artifacts_dir}/rex || exit 1
 cmake .
 make
