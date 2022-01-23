@@ -16,6 +16,6 @@ assert_zero() {
 }
 
 # Executes rex from within the chroot
-chroot $1/T_SYSROOT /bin/bash -c "cd /opt/foster/rex.project; /usr/local/bin/rex -c /opt/foster/rex.project/plans/x86_64/rex.config -p /opt/foster/rex.project/plans/x86_64/stage2.plan"
+chroot ${T_SYSROOT} /bin/bash -c "cd /opt/foster/rex.project; /usr/local/bin/rex -c /opt/foster/rex.project/plans/x86_64/rex.config -p /opt/foster/rex.project/plans/x86_64/stage2.plan"
 assert_zero $?
 		

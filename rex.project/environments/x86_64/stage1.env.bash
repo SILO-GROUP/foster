@@ -30,8 +30,8 @@ CONFIG_DIR=${PROJECT_ROOT}/staging/configs
 SOURCES_DIR=${PROJECT_ROOT}/staging/sources
 PATCHES_DIR=${PROJECT_ROOT}/staging/patches
 
-T_SYSROOT=${PROJECT_ROOT}/T_SYSROOT
-LOGS_ROOT=${PROJECT_ROOT}/logs/scripts
+T_SYSROOT=${PROJECT_ROOT}/staging/artifacts/T_SYSROOT
+LOGS_ROOT=${PROJECT_ROOT}/staging/artifacts/logs/scripts
 
 CROSSTOOLS_DIR=${T_SYSROOT}/crosstools
 TEMP_STAGE_DIR=${T_SYSROOT}/source_stage

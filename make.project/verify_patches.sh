@@ -2,9 +2,9 @@
 
 # downloads sources for various packages necessary 
 
-pushd ${workspace}/staging/sources/ 1>/dev/null 2>/dev/null
+pushd ${patches_dir} 1>/dev/null 2>/dev/null
 
-md5sum --quiet -c ./10.1_sources_md5sums.txt
+md5sum --quiet -c ${config_dir}/patches/10.1_patches_md5sums.txt
 err=$?
 popd 1>/dev/null 2>/dev/null
 

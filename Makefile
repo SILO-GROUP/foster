@@ -1,53 +1,89 @@
 .EXPORT_ALL_VARIABLES:
-
-# Relative path context hack
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
-workspace := $(abspath $(current_dir)/../../foster)
-
 .DEFAULT_GOAL := all
+SHELL := /bin/bash
+
+##
+# Load the config file
+##
+
+# circular dependency loading
+ifndef project_root
+
+%:
+	. ./project_config.sh $(MAKE) $@
+
+else 
+
+##
+# Target Definitions
+##
 
 # download the new source directory contents like LFS proper
 download_sources:
-	${workspace}/makefile.controls/download_sources.sh
+	${make_dir}/download_sources.sh
 
 # download the patches from LFS
 # there is no clean here because i bundle fixed patches
 download_patches:
-	${workspace}/makefile.controls/download_patches.sh
+	${make_dir}/download_patches.sh
 
 # verify the sources downloaded are intact
 verify_sources:
-	${workspace}/makefile.controls/verify_sources.sh
+	${make_dir}/verify_sources.sh
 
 # verify the patches downloaded are intact
 verify_patches:
-	${workspace}/makefile.controls/verify_patches.sh
+	${make_dir}/verify_patches.sh
 
 # builds a chroot
 build_stage1:
-	@sudo ${workspace}/makefile.controls/build_chroot.sh
+	@sudo ${make_dir}/build_chroot.sh
 
 # works around apparently some kind of nesting bug w/ Rex and file descriptors
 hotfix_chroot_compiler:
-	@sudo ${workspace}/rex.project/components/x86_64/stage_1/libstdcxx_pass2.bash ${workspace}
+	@sudo ${rex_dir}/components/x86_64/stage_1/libstdcxx_pass2.bash ${workspace}
 
 # builds the rest of the system from inside the chroot
 build_stage2:
-	sudo ${workspace}/makefile.controls/stage_2_init.sh ${workspace}
+	@sudo ${make_dir}/stage_2_init.sh ${workspace}
 
-all:
-	@sudo ${workspace}/makefile.controls/build_chroot.sh && sudo ${workspace}/rex.project/components/x86_64/stage_1/libstdcxx_pass2.bash ${workspace} && sudo ${workspace}/makefile.controls/stage_2_init.sh ${workspace}
-
+all:  build_stage1 hotfix_chroot_compiler build_stage2 
+	
 # enter the chroot after a stage1 build so we can play around 
 enter_chroot:
-	sudo ${workspace}/makefile.controls/enter_chroot.sh ${workspace}
+	@sudo ${make_dir}/enter_chroot.sh ${workspace}
 
 # clean up artifacts between builds if desired
 clean:
-	${workspace}/makefile.controls/clean.sh
+	@${make_dir}/clean.sh
 
 # wipe the source directory	
 clean_sources:
-	${workspace}/makefile.controls/clean_sources.sh
+	${make_dir}/clean_sources.sh
 
+# wipe the patches directory
+clean_patches:
+	${make_dir}/clean_patches.sh
+
+download_rex:
+	${make_dir}/download_rex.sh
+	
+compile_rex:
+	${make_dir}/compile_rex.sh
+	
+distclean: clean clean_sources clean_patches
+
+#instructions
+# 1. make clean
+# 2. make download_rex
+# 3. make compile_rex
+# 4. make download_sources
+# 5. make verify_sources
+# 6. make download_patches
+# 7. make verify_patches
+# 8. make build_stage1
+# 9. make hotfix_chroot_compiler
+# 10. make build_stage2
+
+# End conditional block.
+endif
