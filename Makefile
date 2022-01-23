@@ -10,7 +10,7 @@ SHELL := /bin/bash
 ifndef project_root
 
 %:
-	/usr/bin/env -i ${SHELL} -c '. ./project_config.sh $(MAKE) $@'
+	. ./project_config.sh $(MAKE) $@
 
 else 
 
