@@ -71,6 +71,9 @@ download_rex:
 compile_rex:
 	${make_dir}/compile_rex.sh
 	
+clean_logs:
+	${make_dir}/clean_logs.sh
+	
 distclean: clean clean_sources clean_patches
 
 make help:

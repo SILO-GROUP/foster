@@ -3,7 +3,7 @@
 # Description:
 # This component lays out all the directories and users and permissions
 # needed to compile the rest of the project.
-env
+
 assert_zero $?
 
 # The Application Name

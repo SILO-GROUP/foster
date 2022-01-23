@@ -25,14 +25,14 @@ assert_zero() {
 	fi
 }
 
-PROJECT_ROOT=/opt/foster
-CONFIG_DIR=${PROJECT_ROOT}/staging/configs
-SOURCES_DIR=${PROJECT_ROOT}/staging/sources
-PATCHES_DIR=${PROJECT_ROOT}/staging/patches
+PROJECT_ROOT=${project_root}
+CONFIG_DIR=${config_dir}
+SOURCES_DIR=${sources_dir}
+PATCHES_DIR=${patches_dir}
 
-M_SYSROOT=${PROJECT_ROOT}/staging/artifacts/T_SYSROOT
+M_SYSROOT=${T_SYSROOT}
 
-LOGS_ROOT=${PROJECT_ROOT}/staging/artifacts/logs/scripts
+LOGS_ROOT=${logs_dir}/rex-output
 
 CROSSTOOLS_DIR=/crosstools
 TEMP_STAGE_DIR=/source_stage
