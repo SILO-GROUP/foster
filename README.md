@@ -1,38 +1,14 @@
-# Foster-D
+# Foster Build System
 The future of SURRO Linux.
 
 # Requirements
-Make, g++, and Rex ( installed at `/usr/local/bin/rex` ).
+- Tested on Ubuntu 20.04 LTS
+- Initially requires the following packages to be installed: `git`, `make`, `cmake`, `g++` 
+- Downloads the rest of the requirements as needed automatically.
 
-Tested on Ubuntu 20.04
 
-Rex source: https://github.com/SILO-GROUP/Rex
-
-Assumes you cloned the project to `/opt/foster`
-
-# makefile Driven
-this project is makefile driven
-
-## make build_chroot
-kick off the rex project
-
-## make clean
-clean the logs between builds and/or commits
-
-## make clean_sources
-clean the sources dir.
-
-## make download_sources
-download the sources
-
-## make download_patches
-download the patches
-
-## make verify_sources
-verify the sources' checksums for file integrity verification
-
-## make verify_patches
-verify the patches' file integrity
+# Instructions
+Instructions have been greatly simplified.  Just run `make help` wherever you cloned this repo to and it'll walk you through the steps in order.
 
 ## make enter_chroot
-This will allow you to enter the chroot you created with the `make build_chroot` command.
+This will allow you to enter the chroot you created with the `make build_stage1` command as you go through the process, to customize your installation.

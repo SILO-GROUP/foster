@@ -92,4 +92,11 @@ make help:
 # 10. make build_stage2
 
 # End conditional block.
+
+# Ubuntu LTS deps:
+#	git
+#	make
+#	cmake
+#	g++
+
 endif
