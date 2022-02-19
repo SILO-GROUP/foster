@@ -45,7 +45,7 @@ hotfix_chroot_compiler:
 
 # builds the rest of the system from inside the chroot
 build_stage2:
-	@sudo --preserve-env ${make_dir}/stage_2_init.sh ${workspace}
+	sudo --preserve-env ${make_dir}/stage_2_init.sh ${workspace}
 
 all:  build_stage1 hotfix_chroot_compiler build_stage2 
 	
@@ -55,18 +55,18 @@ enter_chroot:
 
 # clean up artifacts between builds if desired
 clean:
-	@${make_dir}/clean.sh
+	sudo --preserve-env ${make_dir}/clean.sh $(shell whoami)
 
 # wipe the source directory	
 clean_sources:
-	${make_dir}/clean_sources.sh
+	sudo --preserve-env ${make_dir}/clean_sources.sh $(shell whoami)
 
 # wipe the patches directory
 clean_patches:
-	${make_dir}/clean_patches.sh
+	sudo --preserve-env ${make_dir}/clean_patches.sh $(shell whoami)
 
 download_rex:
-	${make_dir}/download_rex.sh
+	${make_dir}/download_rex.sh 
 	
 compile_rex:
 	${make_dir}/compile_rex.sh

@@ -8,8 +8,14 @@ for mnt in $(mount | grep T_SYSROOT | awk '{ print $3; }'); do
 	done; 
 done
 
+chown -R $1 ${project_root}
+
 echo "Clearing Artifacts ('${artifacts_dir}')..."
 rm -vRf ${artifacts_dir}
+
+# recreate for structure integ.
 mkdir -p ${artifacts_dir}
 touch ${artifacts_dir}/DONT_DELETE.txt
+chown -R $1 ${artifacts_dir}
+
 echo "Artifacts cleared."

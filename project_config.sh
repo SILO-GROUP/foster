@@ -51,11 +51,6 @@ sources_dir=${stage_dir}/sources
 # utility when it takes over compilation
 rex_dir=${project_root}/rex.project
 
-#
-## Variables
-## Tier 2
-#
-
 # The target SYSROOT being compiled
 T_SYSROOT=${artifacts_dir}/T_SYSROOT
 
