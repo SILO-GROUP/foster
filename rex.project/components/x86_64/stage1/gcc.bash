@@ -349,7 +349,7 @@ mode_build_gcc_pass1() {
 	assert_zero $?
 	
 	logprint "Compiling..."
-	make
+	make -j1
 	assert_zero $?
 
 	logprint "Build operation complete."

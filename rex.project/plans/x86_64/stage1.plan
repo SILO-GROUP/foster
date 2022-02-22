@@ -2,11 +2,6 @@
 	"plan":
 	[
 		{
-			"name":"prepare host environment - ubuntu", 
-			"dependencies": [ null ],
-			"comment": "create directories and users necessary to build"
-		},
-		{
 			"name":"stage, build, install binutils pass1", 
 			"dependencies": [ null ],
 			"comment": "5.2"
@@ -30,126 +25,6 @@
 			"name":"build, install libstdcxx/pass1", 
 			"dependencies": [ null ],
 			"comment": "5.6"
-		},
-		{
-			"name":"stage, build, install m4", 
-			"dependencies": [ null ],
-			"comment": "6.2"
-		},
-		{
-			"name":"stage, build, install ncurses", 
-			"dependencies": [ null ],
-			"comment": "6.3"
-		},		
-		{
-			"name":"stage, build, install bash", 
-			"dependencies": [ null ],
-			"comment": "6.4"
-		},
-		{
-			"name":"stage, build, install coreutils", 
-			"dependencies": [ null ],
-			"comment": "6.5"
-		},	
-		{
-			"name":"stage, build, install diffutils", 
-			"dependencies": [ null ],
-			"comment": "6.6"
-		},
-		{
-			"name":"stage, build, install file", 
-			"dependencies": [ null ],
-			"comment": "6.7"
-		},		
-		{
-			"name":"stage, build, install findutils", 
-			"dependencies": [ null ],
-			"comment": "6.8"
-		},
-		{
-			"name":"stage, build, install gawk", 
-			"dependencies": [ null ],
-			"comment": "6.9"
-		},
-		{
-			"name":"stage, build, install grep", 
-			"dependencies": [ null ],
-			"comment": "6.10"
-		},
-		{
-			"name":"stage, build, install gzip", 
-			"dependencies": [ null ],
-			"comment": "6.11"
-		},
-		{
-			"name":"stage, build, install make", 
-			"dependencies": [ null ],
-			"comment": "6.12"
-		},
-		{
-			"name":"stage, build, install patch", 
-			"dependencies": [ null ],
-			"comment": "6.13"
-		},
-		{
-			"name":"stage, build, install sed", 
-			"dependencies": [ null ],
-			"comment": "6.14"
-		},
-		{
-			"name":"stage, build, install tar", 
-			"dependencies": [ null ],
-			"comment": "6.15"
-		},
-		{
-			"name":"stage, build, install xz", 
-			"dependencies": [ null ],
-			"comment": "6.16"
-		},
-		{
-			"name":"stage, build, install binutils pass2", 
-			"dependencies": [ null ],
-			"comment": "6.17"
-		},
-		{
-			"name":"stage, build, install gcc pass2", 
-			"dependencies": [ null ],
-			"comment": "6.18"
-		},
-		{
-			"name":"stage, build, install getopt", 
-			"dependencies": [ null ],
-			"comment": "7.6 and prepares chroot for rex"
-		},
-		{
-			"name":"fix sysroot ownership", 
-			"dependencies": [ null ],
-			"comment": "7.2 Preparing the Chroot"
-		},
-		{
-			"name":"create extended sysoot directories", 
-			"dependencies": [ null ],
-			"comment": "7.2 Preparing the Chroot"
-		},
-		{
-			"name":"create etc files", 
-			"dependencies": [ null ],
-			"comment": "7.6"
-		},
-		{
-			"name":"create log files", 
-			"dependencies": [ null ],
-			"comment": "7.6"
-		},
-		{
-			"name":"prepare virtual kernel filesystems", 
-			"dependencies": [ null ],
-			"comment": "7.3 and prepares chroot for rex"
-		},
-		{
-			"name":"notify of successful completion", 
-			"dependencies": [ null ],
-			"comment": "7.4 Enter the Chroot"
 		}
 	]
 }

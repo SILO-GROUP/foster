@@ -1,0 +1,10 @@
+{
+	"plan":
+	[
+		{
+			"name":"prepare host environment - ubuntu", 
+			"dependencies": [ null ],
+			"comment": "create directories and users necessary to build"
+		}
+	]
+}

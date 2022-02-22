@@ -2,84 +2,124 @@
 	"plan":
 	[
 		{
-			"name":"confirm chroot context", 
+			"name":"stage, build, install m4", 
 			"dependencies": [ null ],
-			"comment": "fails if we are executing out of chroot"
+			"comment": "6.2"
 		},
 		{
-			"name":"stage, build, install gettext", 
+			"name":"stage, build, install ncurses", 
 			"dependencies": [ null ],
-			"comment": "all from da chroot context from here"
+			"comment": "6.3"
+		},		
+		{
+			"name":"stage, build, install bash", 
+			"dependencies": [ null ],
+			"comment": "6.4"
 		},
 		{
-			"name":"stage, build, install bison", 
+			"name":"stage, build, install coreutils", 
 			"dependencies": [ null ],
-			"comment": "all from da chroot context from here"
+			"comment": "6.5"
+		},	
+		{
+			"name":"stage, build, install diffutils", 
+			"dependencies": [ null ],
+			"comment": "6.6"
 		},
 		{
-			"name":"stage, build, install perl", 
+			"name":"stage, build, install file", 
 			"dependencies": [ null ],
-			"comment": "all from da chroot context from here"
+			"comment": "6.7"
+		},		
+		{
+			"name":"stage, build, install findutils", 
+			"dependencies": [ null ],
+			"comment": "6.8"
 		},
 		{
-			"name":"stage, build, install python3", 
+			"name":"stage, build, install gawk", 
 			"dependencies": [ null ],
-			"comment": "all from da chroot context from here"
+			"comment": "6.9"
 		},
 		{
-			"name":"stage, build, install texinfo", 
+			"name":"stage, build, install grep", 
 			"dependencies": [ null ],
-			"comment": "all from da chroot context from here"
+			"comment": "6.10"
 		},
 		{
-			"name":"stage, build, install util-linux", 
+			"name":"stage, build, install gzip", 
 			"dependencies": [ null ],
-			"comment": "all from da chroot context from here"
+			"comment": "6.11"
 		},
 		{
-			"name": "install man pages", 
+			"name":"stage, build, install make", 
 			"dependencies": [ null ],
-			"comment": "all from da chroot context from here"
+			"comment": "6.12"
 		},
 		{
-			"name": "install iana-etc files", 
+			"name":"stage, build, install patch", 
 			"dependencies": [ null ],
-			"comment": "all from da chroot context from here"
+			"comment": "6.13"
 		},
 		{
-			"name": "stage, build, install stage2 glibc", 
+			"name":"stage, build, install sed", 
 			"dependencies": [ null ],
-			"comment": "just in case you're not tired of endlessly f*cking with glibc"
+			"comment": "6.14"
 		},
 		{
-			"name": "stage, build, install zlib", 
+			"name":"stage, build, install tar", 
 			"dependencies": [ null ],
-			"comment": "8.6"
+			"comment": "6.15"
 		},
 		{
-			"name": "stage, build, install bzip2", 
+			"name":"stage, build, install xz", 
 			"dependencies": [ null ],
-			"comment": "8.7"
+			"comment": "6.16"
 		},
 		{
-			"name": "stage, build, install xz/pass2", 
+			"name":"stage, build, install binutils pass2", 
 			"dependencies": [ null ],
-			"comment": "8.8"
+			"comment": "6.17"
 		},
 		{
-			"name": "stage, build, install zstd", 
+			"name":"stage, build, install gcc pass2", 
 			"dependencies": [ null ],
-			"comment": "8.9"
+			"comment": "6.18"
 		},
 		{
-			"name": "stage, build, install file/pass2", 
+			"name":"stage, build, install getopt", 
 			"dependencies": [ null ],
-			"comment": "8.10"
+			"comment": "7.6 and prepares chroot for rex"
 		},
 		{
-			"name": "stage, build, install readline", 
+			"name":"fix sysroot ownership", 
 			"dependencies": [ null ],
-			"comment": "8.11"
+			"comment": "7.2 Preparing the Chroot"
+		},
+		{
+			"name":"create extended sysoot directories", 
+			"dependencies": [ null ],
+			"comment": "7.2 Preparing the Chroot"
+		},
+		{
+			"name":"create etc files", 
+			"dependencies": [ null ],
+			"comment": "7.6"
+		},
+		{
+			"name":"create log files", 
+			"dependencies": [ null ],
+			"comment": "7.6"
+		},
+		{
+			"name":"prepare virtual kernel filesystems", 
+			"dependencies": [ null ],
+			"comment": "7.3 and prepares chroot for rex"
+		},
+		{
+			"name":"notify of successful completion", 
+			"dependencies": [ null ],
+			"comment": "7.4 Enter the Chroot"
 		}
 	]
 }

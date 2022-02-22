@@ -170,6 +170,8 @@ mode_build_pass1() {
 
 	assert_zero $?
 	
+	ulimit -s 3500000
+	
 	logprint "Compiling..."
 	make
 	assert_zero $?
@@ -182,7 +184,7 @@ mode_install_pass1() {
 	pushd "${T_SOURCE_DIR}/build"
 	assert_zero $?
 	
-	logprint "Installing..."
+	logprint "Installing pass1..."
 	make DESTDIR=${T_SYSROOT} install
 	assert_zero $?
 		

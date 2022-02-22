@@ -73,6 +73,9 @@ opts=$(getopt \
     -- "$@"
 )
 
+# sourced from environment
+TEMP_STAGE_DIR=${TEMP_STAGE_DIR}
+
 # process supplied arguments into flags that enable execution modes
 eval set --$opts
 while [[ $# -gt 0 ]]; do
@@ -133,11 +136,14 @@ mode_stage() {
 	rm -Rf "${T_SOURCE_DIR}"*
 
 	logprint "Extracting ${APPNAME}-${VERSION} source archive to ${TEMP_STAGE_DIR}"
-	tar xf "${SOURCES_DIR}/${APPNAME}-${VERSION}.tar."* -C "${TEMP_STAGE_DIR}"
-	assert_zero $?
+	tar xf "${SOURCES_DIR}/${APPNAME}-${VERSION}.tar."* -C "${TEMP_STAGE_DIR}" \
+	|| $( logprint "Couldn't locate source tarball.  Did you run \`make download_sources\`?" \
+	&& assert_zero 127 )
 
+	logprint "Extraction complete...Renaming directory "
 	# conditionally rename if it needs it
-	stat "${T_SOURCE_DIR}-"* && mv "${T_SOURCE_DIR}-"* "${T_SOURCE_DIR}"
+	stat "${T_SOURCE_DIR}-"* && mv "${T_SOURCE_DIR}-"* "${T_SOURCE_DIR}" 
+	assert_zero $?
 
 	logprint "Staging operation complete."
 }

@@ -10,10 +10,10 @@ set -a
 # Configuration:
 # ----------------------------------------------------------------------
 # the name of this application
-APPNAME="file"
+APPNAME="linux"
 
 # the version of this application
-VERSION="5.39"
+VERSION="5.10.17"
 
 # ----------------------------------------------------------------------
 # Variables and functions sourced from Environment:
@@ -30,18 +30,18 @@ VERSION="5.39"
 # register mode selections
 ARGUMENT_LIST=(
     "stage"
-    "build"
-    "install"
-    "all"
+    "build_pass1"
+    "install_pass1"
+    "pass1"
     "help"
 )
 
 # modes to associate with switches
 # assumes you want nothing done unless you ask for it.
 MODE_STAGE=false
-MODE_BUILD=false
-MODE_INSTALL=false
-MODE_ALL=false
+MODE_BUILD_PASS1=false
+MODE_INSTALL_PASS1=false
+MODE_PASS1=false
 MODE_HELP=false
 
 # the file to log to
@@ -74,16 +74,16 @@ while [[ $# -gt 0 ]]; do
             MODE_STAGE=true
             shift 1
             ;;
-        --build)
-            MODE_BUILD=true
+        --build_pass1)
+            MODE_BUILD_PASS1=true
             shift 1
             ;;
-        --install)
-            MODE_INSTALL=true
+        --install_pass1)
+            MODE_INSTALL_PASS1=true
             shift 1
             ;;
-        --all)
-            MODE_ALL=true
+        --pass1)
+            MODE_PASS1=true
             shift 1
             ;;
         --help)
@@ -124,59 +124,57 @@ mode_stage() {
 }
 
 # when the build_pass1 mode is enabled, this will execute
-mode_build() {
-	
-	# patch, configure and build
+mode_build_pass1() {
 	logprint "Starting build of ${APPNAME}..."
 	
-	logprint "Entering stage dir."	
+	logprint "Entering build dir."	
 	pushd "${T_SOURCE_DIR}"
-	assert_zero $?
-		
-	logprint "Configuring ${APPNAME}"
-	./configure --prefix=/usr
-	assert_zero $?
 	
-	logprint "Compiling..."
-	make
+	logprint "Make MRPROPER"
+	make -j1 mrproper
 	assert_zero $?
 	
-	logprint "Checking ${APPNAME}"
-	make check
+	logprint "Building Headers"
+	make -j1 headers
+	assert_zero $?
 	
-	logprint "Build operation complete."
+	logprint "Preparing headers..."
+	find usr/include -name '.*' -delete
+	rm usr/include/Makefile
+	
+	logprint "Header prep complete."
 }
 
-mode_install() {
+mode_install_pass1() {
 	logprint "Starting install of ${APPNAME}..."
 	pushd "${T_SOURCE_DIR}"
 	assert_zero $?
 	
-	logprint "Installing..."
-	make install
+	cp -rv usr/include ${T_SYSROOT}/usr
 	assert_zero $?
-			
+	
 	logprint "Install operation complete."
 }
 
-
 mode_help() {
-	echo "${APPNAME} [ --stage ] [ --build ] [ --install ] [ --all ] [ --help ]"
-	exit 1
+	echo "${APPNAME} [ --stage ] [ --build_pass1 ] [ --install_pass1 ] [ --pass1 ] [ --help ]"
+	exit 0
 }
 
-if [ "$MODE_ALL" = "true" ]; then
+# MODE_PASS1 is a meta toggle for all pass1 modes.  Modes will always 
+# run in the correct order.
+if [ "$MODE_PASS1" = "true" ]; then
 	MODE_STAGE=true
-	MODE_BUILD=true
-	MODE_INSTALL=true
+	MODE_BUILD_PASS1=true
+	MODE_INSTALL_PASS1=true
 fi
 
 # if no options were selected, then show help and exit
 if \
 	[ "$MODE_HELP" != "true" ] && \
 	[ "$MODE_STAGE" != "true" ] && \
-	[ "$MODE_BUILD" != "true" ] && \
-	[ "$MODE_INSTALL" != "true" ]
+	[ "$MODE_BUILD_PASS1" != "true" ] && \
+	[ "$MODE_INSTALL_PASS1" != "true" ]
 then
 	logprint "No option selected during execution."
 	mode_help
@@ -194,15 +192,15 @@ if [ "$MODE_STAGE" = "true" ]; then
 	assert_zero $?
 fi
 
-if [ "$MODE_BUILD" = "true" ]; then
-	logprint "Build of ${APPNAME} selected."
-	mode_build
+if [ "$MODE_BUILD_PASS1" = "true" ]; then
+	logprint "Build of PASS1 selected."
+	mode_build_pass1
 	assert_zero $?
 fi
 
-if [ "$MODE_INSTALL" = "true" ]; then
-	logprint "Install of ${APPNAME} selected."
-	mode_install
+if [ "$MODE_INSTALL_PASS1" = "true" ]; then
+	logprint "Install of PASS1 selected."
+	mode_install_pass1
 	assert_zero $?
 fi
 

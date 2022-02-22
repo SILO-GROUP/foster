@@ -54,6 +54,15 @@ rex_dir=${project_root}/rex.project
 # The target SYSROOT being compiled
 T_SYSROOT=${artifacts_dir}/T_SYSROOT
 
+# where the units for this rex project are located
+units_dir=${rex_dir}/units/x86_64/
+
+# build user
+build_user="phanes"
+
+# build group
+build_group="royalty"
+
 #
 ## End of Shared Variables
 #
