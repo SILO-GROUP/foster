@@ -10,10 +10,10 @@ set -a
 # Configuration:
 # ----------------------------------------------------------------------
 # the name of this application
-APPNAME="bash"
+APPNAME="file"
 
 # the version of this application
-VERSION="5.1"
+VERSION="5.39"
 
 # ----------------------------------------------------------------------
 # Variables and functions sourced from Environment:
@@ -133,16 +133,28 @@ mode_build_temp() {
 	pushd "${T_SOURCE_DIR}"
 	assert_zero $?
 	
+	logprint "Building a local file for signature file generation"
+	mkdir -pv build
+	pushd build
+	assert_zero $?
+	
+	../configure --disable-bzlib --disable-libseccomp --disable-xzlib --disable-zlib
+	assert_zero $?
+	
+	make
+	assert_zero $?
+	
+	popd
+	
 	logprint "Configuring ${APPNAME}..."
 	./configure \
 		--prefix=/usr \
-		--build=$(support/config.guess) \
 		--host=${T_TRIPLET} \
-		--without-bash-malloc
+		--build=$(./config.guess)
 	assert_zero $?
 	
 	logprint "Compiling..."
-	make
+	make FILE_COMPILE=$(pwd)/build/src/file
 	assert_zero $?
 	
 	logprint "Build operation complete."
@@ -150,23 +162,12 @@ mode_build_temp() {
 
 mode_install_temp() {
 	logprint "Starting install of ${APPNAME}..."
-	pushd "${T_SOURCE_DIR}"
+	pushd "${T_SOURCE_DIR}/build"
 	assert_zero $?
 	
 	logprint "Installing..."
 	make DESTDIR=${T_SYSROOT} install
 	assert_zero $?
-
-	logprint "Cleaning up installation..."
-	logprint "Moving /usr/bin/bash to /bin/bash"
-	mv ${T_SYSROOT}/usr/bin/bash ${T_SYSROOT}/bin/bash
-	assert_zero $?
-	
-	logprint "Creating /bin/sh->bash symlink for T_SYSROOT"
-	ln -sv bash ${T_SYSROOT}/bin/sh
-	# TODO update this section to check if a symlink points to bash here and create it if it's not there. 
-	#assert_zero $?
-	
 	
 	logprint "Install operation complete."
 }
@@ -174,7 +175,7 @@ mode_install_temp() {
 
 mode_help() {
 	echo "${APPNAME} [ --stage ] [ --build_temp ] [ --install_temp ] [ --all_temp ] [ --help ]"
-	exit 0
+	exit 1
 }
 
 if [ "$MODE_ALL_TEMP" = "true" ]; then

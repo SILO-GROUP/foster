@@ -1,0 +1,95 @@
+{
+	"units": [
+				{
+			"name":			"fix sysroot ownership",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage3/fix_chroot_perms.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage3.env.bash"
+		},
+		{
+			"name":			"prepare virtual kernel filesystems",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage3/prepare_vkfs.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage3.env.bash"
+		},
+		{
+			"name":			"notify of successful completion",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage3/notify_success.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage3.env.bash"
+		},
+		{
+			"name":			"create extended sysoot directories",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage3/create_extended_directories.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage3.env.bash"
+		},
+		{
+			"name":			"create etc files",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage3/create_etc_files.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage3.env.bash"
+		},
+		{
+			"name":			"create log files",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage3/create_log_files.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/stage3.env.bash"
+		},
+		{
+			"name":			"build, install libstdcxx/pass2",
+			"active":		true,
+			"required":		true,
+			"target":		"components/x86_64/stage3/libstdcxx_pass2.bash",
+			"rectify":		false,
+			"rectifier":	"",
+			"log":			true,
+			"user":			"root",
+			"group":		"root",
+			"shell":		"/bin/bash",
+			"environment":	"environments/x86_64/chroot_bootstrap.bash"
+		}
+	]
+}

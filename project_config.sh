@@ -63,6 +63,9 @@ build_user="phanes"
 # build group
 build_group="royalty"
 
+# vendor prefix in CX compiler
+CX_VENDOR_PREFIX="dhl"
+
 #
 ## End of Shared Variables
 #

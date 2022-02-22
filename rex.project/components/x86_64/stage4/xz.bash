@@ -10,10 +10,10 @@ set -a
 # Configuration:
 # ----------------------------------------------------------------------
 # the name of this application
-APPNAME="bash"
+APPNAME="xz"
 
 # the version of this application
-VERSION="5.1"
+VERSION="5.2.5"
 
 # ----------------------------------------------------------------------
 # Variables and functions sourced from Environment:
@@ -136,9 +136,10 @@ mode_build_temp() {
 	logprint "Configuring ${APPNAME}..."
 	./configure \
 		--prefix=/usr \
-		--build=$(support/config.guess) \
 		--host=${T_TRIPLET} \
-		--without-bash-malloc
+		--build=$(build-aux/config.guess) \
+		--disable-static \
+		--docdir=/usr/share/doc/xz-5.2.5
 	assert_zero $?
 	
 	logprint "Compiling..."
@@ -156,17 +157,19 @@ mode_install_temp() {
 	logprint "Installing..."
 	make DESTDIR=${T_SYSROOT} install
 	assert_zero $?
-
-	logprint "Cleaning up installation..."
-	logprint "Moving /usr/bin/bash to /bin/bash"
-	mv ${T_SYSROOT}/usr/bin/bash ${T_SYSROOT}/bin/bash
+	
+	logprint "Cleaning up..."
+	logprint "Moving items to their proper places"
+	# again, looks wrong
+	mv -v ${T_SYSROOT}/usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} ${T_SYSROOT}/bin
 	assert_zero $?
 	
-	logprint "Creating /bin/sh->bash symlink for T_SYSROOT"
-	ln -sv bash ${T_SYSROOT}/bin/sh
-	# TODO update this section to check if a symlink points to bash here and create it if it's not there. 
-	#assert_zero $?
+	mv -v ${T_SYSROOT}/usr/lib/liblzma.so.* ${T_SYSROOT}/lib
+	assert_zero $?
 	
+	# looks like this can be cleaned up...possibly wrong
+	ln -sfv ../../lib/$(readlink ${T_SYSROOT}/usr/lib/liblzma.so) ${T_SYSROOT}/usr/lib/liblzma.so
+	assert_zero $?
 	
 	logprint "Install operation complete."
 }

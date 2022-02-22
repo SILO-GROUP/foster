@@ -43,13 +43,24 @@ verify_patches:
 build_stage1:
 	sudo /usr/bin/env -i bash -c ". ./project_config.sh && ${make_dir}/build_stage1.sh"
 
-# works around apparently some kind of nesting bug w/ Rex and file descriptors
-hotfix_chroot_compiler:
-	@sudo --preserve-env ${rex_dir}/components/x86_64/stage_1/libstdcxx_pass2.bash ${workspace}
+# compiles temporary toolchain for new cross-compiler 
+build_stage2:
+	sudo /usr/bin/env -i bash -c ". ./project_config.sh && ${make_dir}/build_stage2.sh"
+
+# populates basic sysroot as a chroot
+build_stage3:
+	sudo /usr/bin/env -i bash -c ". ./project_config.sh && ${make_dir}/build_stage3.sh"
 
 # builds the rest of the system from inside the chroot
-build_stage2:
-	sudo --preserve-env ${make_dir}/stage_2_init.sh ${workspace}
+build_stage4:
+	sudo /usr/bin/env -i bash -c ". ./project_config.sh && ${make_dir}/build_stage4.sh"
+
+
+# works around apparently some kind of nesting bug w/ Rex and file descriptors
+#hotfix_chroot_compiler:
+#	@sudo --preserve-env ${rex_dir}/components/x86_64/stage_1/libstdcxx_pass2.bash ${workspace}
+
+
 
 all:  build_stage1 hotfix_chroot_compiler build_stage2 
 	
@@ -82,8 +93,6 @@ distclean: clean clean_sources clean_patches
 
 make help:
 	${make_dir}/help.sh
-
-make stage1: download_rex compile_rex download_sources prepare_environment build_stage1
 
 #instructions
 # 01. make distclean

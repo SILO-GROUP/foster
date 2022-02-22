@@ -174,7 +174,7 @@ mode_build_temp() {
 	assert_zero $?
 	
 	logprint "Compiling..."
-	make
+	make -j1
 	assert_zero $?
 	
 	logprint "Build operation complete."

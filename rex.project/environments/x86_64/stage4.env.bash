@@ -11,9 +11,6 @@ set +h
 
 TERM=xterm-256color
 
-umask 022
-LC_ALL=POSIX
-
 # fail the unit in the event of a non-zero value passed
 # used primarily to check exit codes on previous commands
 # also a great convenient place to add in a "press any key to continue"
@@ -30,13 +27,13 @@ CONFIG_DIR=${config_dir}
 SOURCES_DIR=${sources_dir}
 PATCHES_DIR=${patches_dir}
 
-#T_SYSROOT=${T_SYSROOT}
-LOGS_ROOT=${logs_dir}/../rex-output
+T_SYSROOT=${T_SYSROOT}
+LOGS_ROOT=${PROJECT_ROOT}/staging/artifacts/logs/scripts
 
-CROSSTOOLS_DIR=${T_SYSROOT}/crosstools
-TEMP_STAGE_DIR=${T_SYSROOT}/source_stage
+CROSSTOOLS_DIR=/crosstools
+TEMP_STAGE_DIR=/source_stage
 
-ARCHLIB_DIR=${T_SYSROOT}/lib64
+ARCHLIB_DIR=/lib64
 
 T_VENDOR=${CX_VENDOR_PREFIX}
 T_ARCH=$(uname -m)
@@ -45,13 +42,10 @@ T_TRIPLET=${T_ARCH}-${T_VENDOR}-linux-gnu
 BUILD_USER=${build_user}
 BUILD_GROUP=${build_group}
 
-PATH=/usr/bin
-if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
-PATH=${CROSSTOOLS_DIR}/bin:$PATH:/usr/sbin:/usr/local/bin
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
 
-CONFIG_SITE=${T_SYSROOT}/usr/share/config.site
+CONFIG_SITE=/usr/share/config.site
 
 MAKEFLAGS="-j$(nproc)"
-
 
 echo "Loaded Initial Environment"
